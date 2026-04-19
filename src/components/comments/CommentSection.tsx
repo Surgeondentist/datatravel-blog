@@ -33,7 +33,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
       .eq("post_slug", postSlug)
       .eq("status", "published")
       .order("created_at", { ascending: false });
-    if (data) setComments(data as Comment[]);
+    if (data) setComments(data as unknown as Comment[]);
   }
 
   async function handleLogin() {
