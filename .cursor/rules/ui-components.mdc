@@ -1,0 +1,17 @@
+---
+description: UI, Tailwind y componentes compartidos
+globs: src/components/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Componentes y estilo
+
+## Stack visual
+
+- **Tailwind CSS 4** + utilidades existentes en `globals.css` y tokens del tema (p. ej. `font-heading` / `font-sans` desde el layout).
+- Componentes base al estilo **shadcn** en `src/components/ui/`; nuevos patrones UI deben alinearse con esos archivos antes de introducir otra librería.
+
+## Coherencia
+
+- Reutilizar `PostCard`, `Navbar`, `Footer`, etc., en lugar de duplicar maquetación de tarjetas o cabeceras.
+- **Anuncios**: componentes como `AdUnit` ya integran AdSense; no insertar scripts duplicados de publicidad en páginas sin necesidad.

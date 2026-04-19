@@ -1,0 +1,20 @@
+---
+description: Esquemas Sanity, GROQ y coherencia con el front
+globs: src/sanity/**/*
+alwaysApply: false
+---
+
+# Sanity CMS
+
+## Esquemas
+
+- Tipos en `src/sanity/schemas/`. Al añadir campos al tipo `post`, actualizar **consultas GROQ** y tipos TypeScript en páginas/componentes que consuman esos campos.
+- **Categorías**: los `value` deben coincidir con los slugs usados en el blog (`salud-sexual`, `relaciones`, `educacion`, `bienestar`, `faqs`). Si cambias la lista, actualiza filtros en `src/app/blog/page.tsx` y cualquier otra ruta que filtre por categoría.
+
+## Imágenes
+
+- Portada e imágenes en cuerpo: incluir `alt` en el esquema; en el front usar helpers de `src/sanity/lib/image.ts` cuando aplique.
+
+## Studio
+
+- `basePath` del estudio: `/studio`. No romper esa ruta sin actualizar enlaces y despliegue.

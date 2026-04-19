@@ -7,6 +7,7 @@ import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import AdUnit from "@/components/AdUnit";
+import CommentSection from "@/components/comments/CommentSection";
 import type { Metadata } from "next";
 
 export const revalidate = 3600;
@@ -140,6 +141,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <AdUnit slot="2888653292" />
         </div>
       </article>
+
+      {/* Comentarios */}
+      <div className="mx-auto max-w-3xl px-4 pb-4">
+        <CommentSection postSlug={slug} />
+      </div>
 
       {/* Ad — below article */}
       <div className="mx-auto max-w-3xl px-4 pb-16">
