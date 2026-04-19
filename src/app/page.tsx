@@ -68,7 +68,7 @@ export default async function HomePage() {
 
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-violet-200/80 md:text-xl">
             Artículos, guías y respuestas a las preguntas que te cuesta hacer.
-            Información sexual honesta, basada en evidencia y sin tabúes.
+            Información sexual honesta, real y sin tabúes.
           </p>
 
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
