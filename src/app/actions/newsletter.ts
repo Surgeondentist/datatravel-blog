@@ -18,7 +18,7 @@ export async function subscribeNewsletter(email: string): Promise<{ error?: stri
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("subscribers").insert({ email: email.toLowerCase().trim() });
+  const { error } = await supabase.from("subscribers").insert({ email: email.toLowerCase().trim(), confirmed: true });
 
   if (error) {
     if (error.code === "23505") return { error: "Este correo ya está suscrito." };

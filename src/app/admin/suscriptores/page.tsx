@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
+import { redirect } from "next/navigation";
 import { Mail, Users, Calendar } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -13,10 +15,33 @@ type Subscriber = {
 
 export default async function AdminSubscribersPage() {
   const supabase = await createClient();
-  const { data: subscribers } = await supabase
-    .from("subscribers")
-    .select("id, email, confirmed, created_at")
-    .order("created_at", { ascending: false }) as { data: Subscriber[] | null };
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/");
+
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  if (profile?.role !== "admin") redirect("/");
+
+  let subscribers: Subscriber[] | null = null;
+  let loadError: string | null = null;
+
+  const service = createServiceRoleClient();
+  if (service) {
+    const { data, error } = await service
+      .from("subscribers")
+      .select("id, email, confirmed, created_at")
+      .order("created_at", { ascending: false });
+    if (error) loadError = error.message;
+    else subscribers = data as Subscriber[] | null;
+  } else {
+    const { data, error } = await supabase
+      .from("subscribers")
+      .select("id, email, confirmed, created_at")
+      .order("created_at", { ascending: false });
+    if (error) loadError = error.message;
+    else subscribers = data as Subscriber[] | null;
+  }
 
   const total = subscribers?.length ?? 0;
   const confirmed = subscribers?.filter((s) => s.confirmed).length ?? 0;
@@ -26,6 +51,14 @@ export default async function AdminSubscribersPage() {
 
   return (
     <div>
+      {loadError && (
+        <div className="mb-6 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          No se pudieron cargar los suscriptores: {loadError}. Si usas RLS, ejecuta el SQL en{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">supabase/sql/subscribers_rls.sql</code> o define{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> solo en el servidor (Vercel).
+        </div>
+      )}
+
       {/* Header + stats */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <h2 className="font-heading text-2xl font-bold text-foreground">Suscriptores</h2>
@@ -43,13 +76,17 @@ export default async function AdminSubscribersPage() {
         </div>
       </div>
 
-      {total === 0 ? (
+      {total === 0 && !loadError ? (
         <div className="rounded-2xl border border-border bg-card p-12 text-center text-muted-foreground">
           <Mail className="mx-auto mb-3 h-10 w-10 opacity-30" />
-          <p className="font-medium">Aún no hay suscriptores.</p>
-          <p className="mt-1 text-sm">Cuando alguien se suscriba desde la homepage aparecerá aquí.</p>
+          <p className="font-medium">Aún no hay suscriptores visibles.</p>
+          <p className="mt-1 text-sm">
+            Si ya te suscribiste y no aparece tu correo, Supabase suele estar bloqueando la lectura (RLS). Añade{" "}
+            <code className="rounded bg-muted px-1 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> en Vercel o ejecuta{" "}
+            <code className="rounded bg-muted px-1 text-xs">supabase/sql/subscribers_rls.sql</code> en el SQL Editor.
+          </p>
         </div>
-      ) : (
+      ) : total === 0 ? null : (
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead>
