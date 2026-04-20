@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { submitComment, reportComment } from "@/app/actions/comments";
 import { Flag, LogIn, Send, MessageCircle } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+import { safeAvatarUrl } from "@/lib/safe-avatar-url";
 
 type Comment = {
   id: string;
@@ -12,6 +13,18 @@ type Comment = {
   created_at: string;
   profiles: { display_name: string; avatar_url: string | null };
 };
+
+function CommentAvatar({ avatarUrl, name }: { avatarUrl: string | null | undefined; name: string | undefined }) {
+  const src = safeAvatarUrl(avatarUrl);
+  if (src) {
+    return <img src={src} alt="" className="h-8 w-8 rounded-full object-cover" referrerPolicy="no-referrer" />;
+  }
+  return (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-xs font-semibold text-primary">
+      {name?.[0]?.toUpperCase() ?? "?"}
+    </div>
+  );
+}
 
 export default function CommentSection({ postSlug }: { postSlug: string }) {
   const supabase = createClient();
@@ -141,13 +154,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
             <div key={c.id} className="group rounded-2xl border border-border bg-card p-5">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {c.profiles?.avatar_url ? (
-                    <img src={c.profiles.avatar_url} alt="" className="h-8 w-8 rounded-full object-cover" />
-                  ) : (
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-xs font-semibold text-primary">
-                      {c.profiles?.display_name?.[0]?.toUpperCase() ?? "?"}
-                    </div>
-                  )}
+                  <CommentAvatar avatarUrl={c.profiles?.avatar_url} name={c.profiles?.display_name} />
                   <span className="text-sm font-medium text-foreground">{c.profiles?.display_name ?? "Usuario"}</span>
                 </div>
                 <div className="flex items-center gap-3">

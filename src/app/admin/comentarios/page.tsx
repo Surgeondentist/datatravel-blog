@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { moderateComment, deleteComment } from "@/app/actions/comments";
 import { CheckCircle, XCircle, Trash2, Clock } from "lucide-react";
 import type { Metadata } from "next";
@@ -15,14 +14,14 @@ type Comment = {
   profiles: { display_name: string; email: string };
 };
 
+const statusBadge: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+  published: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+  rejected: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+};
+
 export default async function AdminCommentsPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/");
-
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  if (profile?.role !== "admin") redirect("/");
-
   const { data: comments } = await supabase
     .from("comments")
     .select("id, body, status, post_slug, created_at, profiles(display_name, email)")
@@ -32,38 +31,56 @@ export default async function AdminCommentsPage() {
   const published = comments?.filter((c) => c.status === "published") ?? [];
   const rejected = comments?.filter((c) => c.status === "rejected") ?? [];
 
-  const date = (iso: string) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
-
-  const statusBadge: Record<string, string> = {
-    pending: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
-    published: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-    rejected: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-  };
+  const date = (iso: string) =>
+    new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-12">
-      <h1 className="mb-2 font-heading text-3xl font-bold text-foreground">Moderación de comentarios</h1>
-      <p className="mb-8 text-muted-foreground">
-        <span className="font-medium text-amber-600">{pending.length} pendientes</span> ·{" "}
-        {published.length} publicados · {rejected.length} rechazados
-      </p>
+    <div>
+      <div className="mb-6 flex items-center gap-4">
+        <h2 className="font-heading text-2xl font-bold text-foreground">Comentarios</h2>
+        <div className="flex gap-2 text-sm">
+          <span className="rounded-full bg-amber-100 px-2.5 py-0.5 font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+            {pending.length} pendientes
+          </span>
+          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
+            {published.length} publicados
+          </span>
+          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground">
+            {rejected.length} rechazados
+          </span>
+        </div>
+      </div>
 
-      {pending.length === 0 && (
-        <div className="mb-8 rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground">
-          <Clock className="mx-auto mb-2 h-8 w-8 opacity-40" />
-          No hay comentarios pendientes.
+      {pending.length === 0 && comments?.length === 0 && (
+        <div className="rounded-2xl border border-border bg-card p-12 text-center text-muted-foreground">
+          <Clock className="mx-auto mb-3 h-10 w-10 opacity-30" />
+          <p>No hay comentarios aún.</p>
         </div>
       )}
 
-      <div className="space-y-4">
+      {pending.length === 0 && (comments?.length ?? 0) > 0 && (
+        <div className="mb-6 rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-green-700 dark:border-green-900 dark:bg-green-900/20 dark:text-green-300">
+          Sin comentarios pendientes de revisión.
+        </div>
+      )}
+
+      <div className="space-y-3">
         {comments?.map((c) => (
-          <div key={c.id} className={`rounded-2xl border bg-card p-5 ${c.status === "pending" ? "border-amber-200 dark:border-amber-800" : "border-border"}`}>
+          <div
+            key={c.id}
+            className={`rounded-2xl border bg-card p-5 ${c.status === "pending" ? "border-amber-200 dark:border-amber-800" : "border-border"}`}
+          >
             <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
-              <div>
+              <div className="text-sm">
                 <span className="font-medium text-foreground">{c.profiles?.display_name ?? "—"}</span>
-                <span className="ml-2 text-xs text-muted-foreground">{c.profiles?.email}</span>
-                <span className="ml-2 text-xs text-muted-foreground">· {date(c.created_at)}</span>
-                <span className="ml-2 text-xs text-muted-foreground">· <a href={`/blog/${c.post_slug}`} className="hover:text-primary">/blog/{c.post_slug}</a></span>
+                <span className="ml-2 text-muted-foreground">{c.profiles?.email}</span>
+                <span className="ml-2 text-muted-foreground">· {date(c.created_at)}</span>
+                <span className="ml-2 text-muted-foreground">
+                  ·{" "}
+                  <a href={`/blog/${c.post_slug}`} className="hover:text-primary transition-colors">
+                    /blog/{c.post_slug}
+                  </a>
+                </span>
               </div>
               <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge[c.status]}`}>
                 {c.status === "pending" ? "Pendiente" : c.status === "published" ? "Publicado" : "Rechazado"}
@@ -75,20 +92,20 @@ export default async function AdminCommentsPage() {
             <div className="flex gap-2">
               {c.status !== "published" && (
                 <form action={async () => { "use server"; await moderateComment(c.id, "published"); }}>
-                  <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-700 hover:bg-green-500/20 dark:text-green-400 transition-colors">
+                  <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-700 transition-colors hover:bg-green-500/20 dark:text-green-400">
                     <CheckCircle className="h-3.5 w-3.5" /> Publicar
                   </button>
                 </form>
               )}
               {c.status !== "rejected" && (
                 <form action={async () => { "use server"; await moderateComment(c.id, "rejected"); }}>
-                  <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-500/20 dark:text-amber-400 transition-colors">
+                  <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-700 transition-colors hover:bg-amber-500/20 dark:text-amber-400">
                     <XCircle className="h-3.5 w-3.5" /> Rechazar
                   </button>
                 </form>
               )}
               <form action={async () => { "use server"; await deleteComment(c.id); }}>
-                <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-500/20 dark:text-red-400 transition-colors">
+                <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-700 transition-colors hover:bg-red-500/20 dark:text-red-400">
                   <Trash2 className="h-3.5 w-3.5" /> Eliminar
                 </button>
               </form>
@@ -96,6 +113,6 @@ export default async function AdminCommentsPage() {
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

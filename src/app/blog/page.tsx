@@ -74,7 +74,8 @@ export default async function BlogPage({
             <Link
               key={cat.slug}
               href={cat.slug ? `/blog?category=${cat.slug}` : "/blog"}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
+              aria-current={(category ?? "") === cat.slug ? "page" : undefined}
+            className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
                 (category ?? "") === cat.slug
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "border border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"

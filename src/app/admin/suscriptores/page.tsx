@@ -1,0 +1,91 @@
+import { createClient } from "@/lib/supabase/server";
+import { Mail, Users, Calendar } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Admin — Suscriptores" };
+
+type Subscriber = {
+  id: string;
+  email: string;
+  confirmed: boolean;
+  created_at: string;
+};
+
+export default async function AdminSubscribersPage() {
+  const supabase = await createClient();
+  const { data: subscribers } = await supabase
+    .from("subscribers")
+    .select("id, email, confirmed, created_at")
+    .order("created_at", { ascending: false }) as { data: Subscriber[] | null };
+
+  const total = subscribers?.length ?? 0;
+  const confirmed = subscribers?.filter((s) => s.confirmed).length ?? 0;
+
+  const date = (iso: string) =>
+    new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+
+  return (
+    <div>
+      {/* Header + stats */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <h2 className="font-heading text-2xl font-bold text-foreground">Suscriptores</h2>
+        <div className="flex gap-3">
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm">
+            <Users className="h-4 w-4 text-primary" />
+            <span className="font-semibold text-foreground">{total}</span>
+            <span className="text-muted-foreground">total</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm">
+            <Mail className="h-4 w-4 text-green-500" />
+            <span className="font-semibold text-foreground">{confirmed}</span>
+            <span className="text-muted-foreground">confirmados</span>
+          </div>
+        </div>
+      </div>
+
+      {total === 0 ? (
+        <div className="rounded-2xl border border-border bg-card p-12 text-center text-muted-foreground">
+          <Mail className="mx-auto mb-3 h-10 w-10 opacity-30" />
+          <p className="font-medium">Aún no hay suscriptores.</p>
+          <p className="mt-1 text-sm">Cuando alguien se suscriba desde la homepage aparecerá aquí.</p>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-2xl border border-border bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border bg-secondary/50">
+                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Correo</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Estado</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" /> Fecha
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {subscribers?.map((s) => (
+                <tr key={s.id} className="transition-colors hover:bg-secondary/30">
+                  <td className="px-5 py-3.5 font-medium text-foreground">{s.email}</td>
+                  <td className="px-5 py-3.5">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        s.confirmed
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${s.confirmed ? "bg-green-500" : "bg-muted-foreground/50"}`} />
+                      {s.confirmed ? "Confirmado" : "Pendiente"}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5 text-muted-foreground">{date(s.created_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

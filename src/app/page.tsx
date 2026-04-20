@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, Heart, Shield, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PostCard from "@/components/blog/PostCard";
 import AdUnit from "@/components/AdUnit";
+import NewsletterForm from "@/components/NewsletterForm";
 import { client } from "@/sanity/lib/client";
 import { latestPostsQuery } from "@/sanity/lib/queries";
 
@@ -43,14 +44,14 @@ export default async function HomePage() {
   return (
     <main>
       {/* ── Hero ── */}
-      <section className="relative min-h-[92vh] overflow-hidden flex items-center">
+      <section className="relative min-h-[92svh] overflow-hidden flex items-center">
         {/* Background: layered gradient mesh */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-purple-900 to-indigo-950" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(139,92,246,0.5),transparent)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,rgba(167,139,250,0.2),transparent)]" />
         {/* Floating orbs */}
-        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-violet-600/20 blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl animate-pulse [animation-delay:1s]" />
+        <div aria-hidden="true" className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-violet-600/20 blur-3xl motion-safe:animate-pulse" />
+        <div aria-hidden="true" className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl motion-safe:animate-pulse motion-safe:[animation-delay:1s]" />
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
@@ -60,7 +61,7 @@ export default async function HomePage() {
             Vínculo Consciente
           </Badge>
 
-          <h1 className="mb-6 font-heading text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl">
+          <h1 className="mb-6 font-heading text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">
             Tu salud sexual{" "}
             <span className="bg-gradient-to-r from-violet-300 to-purple-200 bg-clip-text text-transparent">
               importa
@@ -184,19 +185,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-purple-900 to-indigo-950" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(139,92,246,0.3),transparent)]" />
         <div className="relative mx-auto max-w-xl px-4 text-center">
-          <Sparkles className="mx-auto mb-4 h-8 w-8 text-violet-300/60" />
+          <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-violet-300/60" />
           <h2 className="mb-3 font-heading text-3xl font-bold text-white">Recibe contenido en tu correo</h2>
           <p className="mb-8 text-violet-200/70">Artículos nuevos, guías exclusivas y respuestas a tus preguntas.</p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="email"
-              placeholder="tu@correo.com"
-              className="flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder-violet-300/50 outline-none backdrop-blur-sm focus:border-violet-400 focus:ring-1 focus:ring-violet-400"
-            />
-            <button className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-violet-900 transition-all hover:-translate-y-0.5 hover:bg-violet-50 hover:shadow-lg cursor-pointer">
-              Suscribirme
-            </button>
-          </div>
+          <NewsletterForm />
         </div>
       </section>
 

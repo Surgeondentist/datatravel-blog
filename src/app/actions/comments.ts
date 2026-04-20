@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { rateLimitReportComment, rateLimitSubmitComment } from "@/lib/rate-limit";
 
 const BANNED_WORDS = ["spam", "casino", "viagra", "porno", "xxx"];
 
@@ -18,6 +19,9 @@ export async function submitComment(postSlug: string, body: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Debes iniciar sesión para comentar." };
+
+  const allowed = await rateLimitSubmitComment(user.id);
+  if (!allowed) return { error: "Demasiados comentarios en poco tiempo. Espera unos minutos." };
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
   if (profile?.role === "banned") return { error: "Tu cuenta no puede publicar comentarios." };
@@ -38,6 +42,9 @@ export async function reportComment(commentId: string, reason: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Debes iniciar sesión." };
+
+  const allowed = await rateLimitReportComment(user.id);
+  if (!allowed) return { error: "Demasiados reportes en poco tiempo. Prueba más tarde." };
 
   const { error } = await supabase.from("reports").insert({
     comment_id: commentId,

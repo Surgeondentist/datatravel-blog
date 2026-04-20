@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu, X, Sparkles, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import UserMenu from "@/components/layout/UserMenu";
 
 const navLinks = [
   { href: "/blog", label: "Artículos" },
@@ -56,9 +57,10 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <UserMenu />
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger className="md:hidden flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary cursor-pointer">
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            <SheetTrigger aria-label={open ? "Cerrar menú" : "Abrir menú"} className="md:hidden flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary cursor-pointer">
+              {open ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
             </SheetTrigger>
             <SheetContent side="right" className="w-72 pt-12 bg-background">
               <nav className="flex flex-col gap-1">
