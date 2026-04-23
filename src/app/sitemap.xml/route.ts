@@ -16,9 +16,11 @@ function escapeXmlLoc(url: string): string {
   return url.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-/** W3C Datetime (ISO 8601), recomendado para lastmod. */
-function w3cDatetime(d: Date): string {
-  return d.toISOString();
+/** lastmod en formato de fecha (YYYY-MM-DD), sin fracciones; aceptado por el protocolo de sitemaps y Google. */
+function sitemapLastmod(d: Date): string {
+  const t = d.getTime();
+  if (Number.isNaN(t)) return new Date().toISOString().slice(0, 10);
+  return d.toISOString().slice(0, 10);
 }
 
 export async function GET() {
@@ -31,13 +33,15 @@ export async function GET() {
     posts = [];
   }
 
-  const now = w3cDatetime(new Date());
+  const withSlug = posts.filter((p) => typeof p.slug?.current === "string" && p.slug.current.length > 0);
+
+  const now = sitemapLastmod(new Date());
   const entries: { loc: string; lastmod: string; changefreq: string; priority: string }[] = [
     { loc: base, lastmod: now, changefreq: "daily", priority: "1.0" },
     { loc: `${base}/blog`, lastmod: now, changefreq: "daily", priority: "0.9" },
-    ...posts.map((post) => ({
-      loc: `${base}/blog/${post.slug.current}`,
-      lastmod: post.publishedAt ? w3cDatetime(new Date(post.publishedAt)) : now,
+    ...withSlug.map((post) => ({
+      loc: `${base}/blog/${post.slug!.current}`,
+      lastmod: post.publishedAt ? sitemapLastmod(new Date(post.publishedAt)) : now,
       changefreq: "weekly",
       priority: "0.8",
     })),
