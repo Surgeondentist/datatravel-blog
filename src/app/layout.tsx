@@ -74,14 +74,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {gaId ? (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
-            <Script id="google-analytics" strategy="afterInteractive">
+            {/* beforeInteractive: va en el HTML inicial para que Google (GSC / asistente de etiqueta) lo detecte sin ejecutar JS tardío */}
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="beforeInteractive" />
+            <Script id="google-analytics" strategy="beforeInteractive">
               {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${gaId}');
-          `}
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}');
+              `.trim()}
             </Script>
           </>
         ) : null}
