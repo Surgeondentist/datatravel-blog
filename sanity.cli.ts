@@ -1,11 +1,9 @@
 import { defineCliConfig } from "sanity/cli";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
-
 export default defineCliConfig({
-  api: projectId
-    ? { projectId, dataset }
-    : { projectId: "missing-env", dataset: "production" },
+  api: {
+    projectId: "l2dq4e3s",
+    dataset: "production",
+  },
   studioHost: "redshell",
 });
