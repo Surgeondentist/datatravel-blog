@@ -22,26 +22,51 @@ export default function UserMenu() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null);
-      if (data.user) fetchProfile(data.user.id);
+      const u = data.user ?? null;
+      setUser(u);
+      if (u) void fetchProfile(u);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) fetchProfile(session.user.id);
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) void fetchProfile(u);
       else setProfile(null);
     });
 
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  async function fetchProfile(userId: string) {
-    const { data } = await supabase
+  /** maybeSingle evita 406/errores si no hay fila; insert intenta reparar ausencia de trigger o usuario antiguo. */
+  async function fetchProfile(user: User) {
+    let { data } = await supabase
       .from("profiles")
       .select("display_name, avatar_url, role")
-      .eq("id", userId)
-      .single();
-    if (data) setProfile(data);
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!data) {
+      const displayName =
+        (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
+        (typeof user.user_metadata?.name === "string" && user.user_metadata.name) ||
+        (user.email ? user.email.split("@")[0] : null);
+      const { error: insertErr } = await supabase.from("profiles").insert({
+        id: user.id,
+        email: user.email ?? "",
+        display_name: displayName,
+        avatar_url:
+          typeof user.user_metadata?.avatar_url === "string" ? user.user_metadata.avatar_url : null,
+        role: "user",
+      });
+      if (!insertErr) {
+        const again = await supabase
+          .from("profiles")
+          .select("display_name, avatar_url, role")
+          .eq("id", user.id)
+          .maybeSingle();
+        data = again.data ?? null;
+      }
+    }
+    setProfile(data ?? null);
   }
 
   useEffect(() => {

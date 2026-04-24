@@ -160,6 +160,12 @@ CREATE POLICY "profiles_update_self"
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
+-- Perfil propio si el trigger no corrió (p. ej. usuario creado antes del SQL)
+DROP POLICY IF EXISTS "profiles_insert_own" ON public.profiles;
+CREATE POLICY "profiles_insert_own"
+  ON public.profiles FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = id);
+
 -- subscribers (newsletter + admin)
 DROP POLICY IF EXISTS "Newsletter: insert público" ON public.subscribers;
 DROP POLICY IF EXISTS "Newsletter: lectura solo admins" ON public.subscribers;

@@ -23,7 +23,7 @@ export async function submitComment(postSlug: string, body: string) {
   const allowed = await rateLimitSubmitComment(user.id);
   if (!allowed) return { error: "Demasiados comentarios en poco tiempo. Espera unos minutos." };
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
   if (profile?.role === "banned") return { error: "Tu cuenta no puede publicar comentarios." };
 
   const { error } = await supabase.from("comments").insert({
@@ -62,7 +62,7 @@ export async function moderateComment(commentId: string, status: "published" | "
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "No autorizado." };
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
   if (profile?.role !== "admin") return { error: "No autorizado." };
 
   const { error } = await supabase.from("comments").update({ status }).eq("id", commentId);
@@ -76,7 +76,7 @@ export async function deleteComment(commentId: string) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "No autorizado." };
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
   if (profile?.role !== "admin") return { error: "No autorizado." };
 
   const { error } = await supabase.from("comments").delete().eq("id", commentId);
