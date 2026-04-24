@@ -18,15 +18,9 @@ export default defineConfig({
   title: "Redshell — CMS",
   projectId,
   dataset,
-  plugins: [
-    // No uses `name` personalizado aquí: rompe el router embebido (NextStudio) con
-    // "Could not map state keys: tool, cms". El segmento URL por defecto es "structure".
-    structureTool({
-      title: "CMS",
-      structure,
-    }),
-    visionTool(),
-  ],
+  // Mismo patrón que `Sexologia Content/blog` (Vínculo consciente): structureTool + vision,
+  // sin `name` en el tool; `structure` solo personaliza la lista lateral.
+  plugins: [structureTool({ title: "CMS", structure }), visionTool()],
   schema: { types: schemaTypes },
   basePath: "/studio",
 });
