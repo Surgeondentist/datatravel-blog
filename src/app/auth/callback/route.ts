@@ -13,6 +13,16 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL("/auth/error?reason=rate_limit", origin).toString());
   }
 
+  const oauthError = searchParams.get("error");
+  const oauthDesc = searchParams.get("error_description");
+  if (oauthError) {
+    const u = new URL("/auth/error", origin);
+    u.searchParams.set("reason", "oauth");
+    u.searchParams.set("oauth_code", oauthError);
+    if (oauthDesc) u.searchParams.set("detail", oauthDesc.slice(0, 400));
+    return NextResponse.redirect(u.toString());
+  }
+
   const code = searchParams.get("code");
   const next = safeInternalNextPath(searchParams.get("next"));
 
@@ -23,7 +33,11 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL(next, origin).toString());
     }
     console.error("[auth/callback] exchangeCodeForSession:", error.message);
+    const u = new URL("/auth/error", origin);
+    u.searchParams.set("reason", "exchange");
+    u.searchParams.set("detail", error.message.slice(0, 300));
+    return NextResponse.redirect(u.toString());
   }
 
-  return NextResponse.redirect(new URL("/auth/error", origin).toString());
+  return NextResponse.redirect(new URL("/auth/error?reason=missing_code", origin).toString());
 }
