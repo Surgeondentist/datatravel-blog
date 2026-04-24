@@ -17,12 +17,15 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 CREATE INDEX IF NOT EXISTS idx_profiles_role ON public.profiles (role);
 
 CREATE OR REPLACE FUNCTION public.set_profiles_updated_at()
-RETURNS trigger AS $$
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
 BEGIN
   NEW.updated_at = now();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 DROP TRIGGER IF EXISTS trg_profiles_updated_at ON public.profiles;
 CREATE TRIGGER trg_profiles_updated_at
@@ -63,6 +66,7 @@ CREATE TRIGGER on_auth_user_created
 CREATE OR REPLACE FUNCTION public.profiles_prevent_role_escalation()
 RETURNS trigger
 LANGUAGE plpgsql
+SET search_path = public
 AS $$
 DECLARE
   is_admin boolean;
@@ -193,7 +197,11 @@ DROP POLICY IF EXISTS "Newsletter: lectura solo admins" ON public.subscribers;
 
 CREATE POLICY "Newsletter: insert público"
   ON public.subscribers FOR INSERT TO anon, authenticated
-  WITH CHECK (true);
+  WITH CHECK (
+    email IS NOT NULL
+    AND length(trim(email)) > 3
+    AND email LIKE '%@%'
+  );
 
 CREATE POLICY "Newsletter: lectura solo admins"
   ON public.subscribers FOR SELECT TO authenticated
@@ -248,9 +256,12 @@ ON CONFLICT (id) DO UPDATE SET
   allowed_mime_types = EXCLUDED.allowed_mime_types;
 
 DROP POLICY IF EXISTS "Avatares: lectura pública" ON storage.objects;
-CREATE POLICY "Avatares: lectura pública"
-  ON storage.objects FOR SELECT
-  USING (bucket_id = 'avatars');
+CREATE POLICY "Avatares: lectura propia"
+  ON storage.objects FOR SELECT TO authenticated
+  USING (
+    bucket_id = 'avatars'
+    AND split_part(name, '/', 1) = auth.uid()::text
+  );
 
 DROP POLICY IF EXISTS "Avatares: subir en carpeta propia" ON storage.objects;
 CREATE POLICY "Avatares: subir en carpeta propia"

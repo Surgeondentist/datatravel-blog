@@ -15,7 +15,11 @@ CREATE POLICY "Newsletter: insert público"
   ON public.subscribers
   FOR INSERT
   TO anon, authenticated
-  WITH CHECK (true);
+  WITH CHECK (
+    email IS NOT NULL
+    AND length(trim(email)) > 3
+    AND email LIKE '%@%'
+  );
 
 -- Solo admins (usa is_profile_admin() del maestro; evita recursión RLS en profiles).
 CREATE POLICY "Newsletter: lectura solo admins"
