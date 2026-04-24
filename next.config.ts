@@ -13,6 +13,20 @@ function supabaseStorageHostname(): string | null {
 const supabaseHost = supabaseStorageHostname();
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/studio",
+        destination: "https://redshell.sanity.studio",
+        permanent: false,
+      },
+      {
+        source: "/studio/:path*",
+        destination: "https://redshell.sanity.studio/:path*",
+        permanent: false,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
