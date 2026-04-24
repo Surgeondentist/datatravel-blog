@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessageSquare, Users } from "lucide-react";
+import { MessageSquare, Megaphone, Users } from "lucide-react";
 
 const tabs = [
-  { href: "/admin/comentarios", label: "Comentarios", icon: MessageSquare },
+  { href: "/admin/comentarios",  label: "Comentarios",  icon: MessageSquare },
   { href: "/admin/suscriptores", label: "Suscriptores", icon: Users },
+  { href: "/admin/amplificar",   label: "Amplificar",   icon: Megaphone },
 ];
 
 export default function AdminTabs() {
