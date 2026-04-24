@@ -34,6 +34,10 @@ yarn-error.log*
 .env*
 !.env.example
 
+# sanity studio build output
+/dist/
+/.sanity/
+
 # local editor / agent (no versionar)
 .cursor/
 .claude/
