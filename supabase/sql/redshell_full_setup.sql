@@ -73,6 +73,10 @@ BEGIN
   IF OLD.role IS NOT DISTINCT FROM NEW.role THEN
     RETURN NEW;
   END IF;
+  -- Sin JWT (p. ej. SQL Editor de Supabase / service_role): no bloquear el primer admin.
+  IF auth.uid() IS NULL THEN
+    RETURN NEW;
+  END IF;
   SELECT EXISTS (
     SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin'
   ) INTO is_admin;
