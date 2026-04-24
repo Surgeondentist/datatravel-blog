@@ -18,6 +18,9 @@ export default defineConfig({
   title: "Redshell — CMS",
   projectId,
   dataset,
+  // Releases activo por defecto en Studio ≥3.75 provoca el aviso «Cannot create a published document»
+  // al crear posts en perspectiva Published; para un blog simple usamos flujo clásico draft → publish.
+  releases: { enabled: false },
   // Mismo patrón que `Sexologia Content/blog` (Vínculo consciente): structureTool + vision,
   // sin `name` en el tool; `structure` solo personaliza la lista lateral.
   plugins: [structureTool({ title: "CMS", structure }), visionTool()],
