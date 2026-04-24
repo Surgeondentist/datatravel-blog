@@ -18,11 +18,6 @@ export default defineConfig({
   title: "Redshell — CMS",
   projectId,
   dataset,
-  // Releases + borradores programados siguen activos por defecto; solo `releases: false` deja
-  // `scheduled-drafts` / schedules en red (ver Network). Desactivamos todo el bloque “versiones”.
-  releases: { enabled: false },
-  scheduledDrafts: { enabled: false },
-  scheduledPublishing: { enabled: false },
   // Mismo patrón que `Sexologia Content/blog` (Vínculo consciente): structureTool + vision,
   // sin `name` en el tool; `structure` solo personaliza la lista lateral.
   plugins: [structureTool({ title: "CMS", structure }), visionTool()],
