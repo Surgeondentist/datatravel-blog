@@ -10,5 +10,4 @@ export default defineConfig({
   dataset: "production",
   plugins: [structureTool(), visionTool()],
   schema: { types: schemaTypes },
-  basePath: "/studio",
 });
