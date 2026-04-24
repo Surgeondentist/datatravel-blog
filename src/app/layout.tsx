@@ -5,7 +5,6 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import AdSenseScript from "@/components/AdSenseScript";
 import { getSiteUrl } from "@/lib/site";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -86,9 +85,16 @@ gtag('config', '${gaId}');
             </Script>
           </>
         ) : null}
+        {adsenseClient ? (
+          <Script
+            id="adsense-init"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            strategy="beforeInteractive"
+            crossOrigin="anonymous"
+          />
+        ) : null}
       </head>
       <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
-        <AdSenseScript />
         <ThemeProvider>
           <Navbar />
           <div className="flex-1">{children}</div>
