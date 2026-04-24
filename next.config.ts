@@ -13,6 +13,10 @@ function supabaseStorageHostname(): string | null {
 const supabaseHost = supabaseStorageHostname();
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    // Studio embebido: primera ruta del structure tool es /studio/structure (evita estado sin segmento).
+    return [{ source: "/studio", destination: "/studio/structure", permanent: false }];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },

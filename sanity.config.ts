@@ -19,8 +19,9 @@ export default defineConfig({
   projectId,
   dataset,
   plugins: [
+    // No uses `name` personalizado aquí: rompe el router embebido (NextStudio) con
+    // "Could not map state keys: tool, cms". El segmento URL por defecto es "structure".
     structureTool({
-      name: "cms",
       title: "CMS",
       structure,
     }),
