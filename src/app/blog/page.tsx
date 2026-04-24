@@ -10,6 +10,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Artículos",
   description: "Todos los artículos sobre tecnología, inteligencia artificial y ciberseguridad.",
+  alternates: { canonical: "/blog" },
 };
 
 const categories = [

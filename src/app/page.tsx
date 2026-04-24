@@ -6,8 +6,13 @@ import AdUnit from "@/components/AdUnit";
 import NewsletterForm from "@/components/NewsletterForm";
 import { client } from "@/sanity/lib/client";
 import { latestPostsQuery } from "@/sanity/lib/queries";
+import type { Metadata } from "next";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const categories = [
   { slug: "tecnologia", label: "Tecnología", icon: "✦" },

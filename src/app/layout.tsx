@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AdSenseScript from "@/components/AdSenseScript";
+import { getSiteUrl } from "@/lib/site";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -23,8 +24,18 @@ const inter = Inter({
 
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
 const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim();
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+
+function metadataBaseUrl(): URL {
+  try {
+    return new URL(getSiteUrl());
+  } catch {
+    return new URL("http://localhost:3000");
+  }
+}
 
 export const metadata: Metadata = {
+  metadataBase: metadataBaseUrl(),
   title: {
     default: "Blogtech — Tecnología, IA y ciberseguridad",
     template: "%s | Blogtech",
@@ -46,6 +57,9 @@ export const metadata: Metadata = {
   },
   ...(adsenseClient
     ? { other: { "google-adsense-account": adsenseClient } as Record<string, string> }
+    : {}),
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
     : {}),
 };
 
