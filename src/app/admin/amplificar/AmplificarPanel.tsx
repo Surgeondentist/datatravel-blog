@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Hash, Mail, Play, Copy, Check, Loader2 } from "lucide-react";
+import { Hash, Mail, Play, Copy, Check, Loader2, Send } from "lucide-react";
 import { generarContenido, type Formato } from "@/app/actions/amplificar";
+import { enviarNewsletter } from "@/app/actions/newsletter-send";
 
 type Post = { _id: string; title: string; slug: { current: string } };
 
@@ -16,13 +17,17 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
   const [slug, setSlug] = useState("");
   const [cargando, setCargando] = useState<Formato | null>(null);
   const [resultado, setResultado] = useState("");
+  const [formatoActivo, setFormatoActivo] = useState<Formato | null>(null);
   const [error, setError] = useState("");
   const [copiado, setCopiado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [envioOk, setEnvioOk] = useState<string | null>(null);
 
   async function generar(formato: Formato) {
     if (!slug) { setError("Select a post first"); return; }
     setError("");
     setResultado("");
+    setEnvioOk(null);
     setCargando(formato);
 
     const res = await generarContenido(slug, formato);
@@ -30,6 +35,25 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
 
     if ("error" in res) { setError(res.error); return; }
     setResultado(res.content);
+    setFormatoActivo(formato);
+  }
+
+  async function enviar() {
+    if (!resultado) return;
+    setEnviando(true);
+    setError("");
+    setEnvioOk(null);
+
+    // Extract subject from the generated content (first **Subject:** line)
+    const subjectMatch = resultado.match(/\*\*Subject:\*\*\s*(.+)/);
+    const subject = subjectMatch ? subjectMatch[1].trim() : "New post on Redshell";
+    const html = resultado.replace(/\n/g, "<br>");
+
+    const res = await enviarNewsletter(subject, html);
+    setEnviando(false);
+
+    if ("error" in res) { setError(res.error); return; }
+    setEnvioOk(`Sent to ${res.sent} subscriber${res.sent !== 1 ? "s" : ""}`);
   }
 
   async function copiar() {
@@ -96,21 +120,43 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
         </p>
       )}
 
+      {/* Envío OK */}
+      {envioOk && (
+        <p className="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-600 dark:text-green-400">
+          {envioOk}
+        </p>
+      )}
+
       {/* Resultado */}
       {resultado && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-foreground">Output</span>
-            <button
-              onClick={copiar}
-              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-            >
-              {copiado ? (
-                <><Check className="h-3.5 w-3.5 text-green-500" /> Copied</>
-              ) : (
-                <><Copy className="h-3.5 w-3.5" /> Copy</>
+            <div className="flex items-center gap-2">
+              {formatoActivo === "newsletter" && (
+                <button
+                  onClick={enviar}
+                  disabled={enviando}
+                  className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {enviando ? (
+                    <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Sending…</>
+                  ) : (
+                    <><Send className="h-3.5 w-3.5" /> Send to subscribers</>
+                  )}
+                </button>
               )}
-            </button>
+              <button
+                onClick={copiar}
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                {copiado ? (
+                  <><Check className="h-3.5 w-3.5 text-green-500" /> Copied</>
+                ) : (
+                  <><Copy className="h-3.5 w-3.5" /> Copy</>
+                )}
+              </button>
+            </div>
           </div>
           <textarea
             readOnly
