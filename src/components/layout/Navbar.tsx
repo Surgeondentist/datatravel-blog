@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Sparkles, Moon, Sun } from "lucide-react";
+import { Menu, X, Cpu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserMenu from "@/components/layout/UserMenu";
 
 const navLinks = [
   { href: "/blog", label: "Artículos" },
-  { href: "/blog?category=salud-sexual", label: "Salud Sexual" },
-  { href: "/blog?category=relaciones", label: "Relaciones" },
-  { href: "/blog?category=educacion", label: "Educación" },
+  { href: "/blog?category=tecnologia", label: "Tecnología" },
+  { href: "/blog?category=inteligencia-artificial", label: "IA" },
+  { href: "/blog?category=ciberseguridad", label: "Ciberseguridad" },
 ];
 
 function ThemeToggle() {
@@ -36,10 +36,10 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <Cpu className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="font-heading font-semibold tracking-tight text-foreground">
-            Vínculo<span className="text-primary"> Consciente</span>
+            Blog<span className="text-primary">tech</span>
           </span>
         </Link>
 

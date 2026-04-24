@@ -28,19 +28,17 @@ type Post = {
 };
 
 const categoryLabels: Record<string, string> = {
-  "salud-sexual": "Salud Sexual",
-  relaciones: "Relaciones",
-  educacion: "Educación",
-  bienestar: "Bienestar",
-  faqs: "FAQs",
+  tecnologia: "Tecnología",
+  "inteligencia-artificial": "Inteligencia artificial",
+  ciberseguridad: "Ciberseguridad",
+  guias: "Guías y herramientas",
 };
 
 const categoryColors: Record<string, string> = {
-  "salud-sexual": "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
-  relaciones: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
-  educacion: "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300",
-  bienestar: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
-  faqs: "bg-secondary text-secondary-foreground",
+  tecnologia: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/45 dark:text-cyan-200",
+  "inteligencia-artificial": "bg-sky-100 text-sky-800 dark:bg-sky-900/45 dark:text-sky-200",
+  ciberseguridad: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/45 dark:text-emerald-200",
+  guias: "bg-slate-100 text-slate-800 dark:bg-slate-800/50 dark:text-slate-200",
 };
 
 export async function generateStaticParams() {
@@ -81,7 +79,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     <main>
       {/* Ad — top */}
       <div className="mx-auto max-w-3xl px-4 pt-8">
-        <AdUnit slot="4269170269" />
+        <AdUnit />
       </div>
 
       <article className="mx-auto max-w-3xl px-4 py-10">
@@ -130,9 +128,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         )}
 
         {/* Ad — in-article top */}
-        <div className="mb-8">
-          <AdUnit slot="4641764840" format="fluid" layout="in-article" fullWidthResponsive={false} />
-        </div>
+        {process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_ARTICLE ? (
+          <div className="mb-8">
+            <AdUnit
+              slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_ARTICLE}
+              format="fluid"
+              layout="in-article"
+              fullWidthResponsive={false}
+            />
+          </div>
+        ) : null}
 
         <div className="prose prose-neutral dark:prose-invert prose-headings:font-heading prose-headings:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl max-w-none">
           {post.body && (
@@ -144,9 +149,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
 
         {/* Ad — mid article square */}
-        <div className="my-10">
-          <AdUnit slot="2888653292" />
-        </div>
+        {process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID ? (
+          <div className="my-10">
+            <AdUnit slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_MID} />
+          </div>
+        ) : null}
       </article>
 
       {/* Comentarios */}
@@ -156,7 +163,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* Ad — below article */}
       <div className="mx-auto max-w-3xl px-4 pb-16">
-        <AdUnit slot="4269170269" />
+        <AdUnit />
       </div>
     </main>
   );

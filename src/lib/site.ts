@@ -16,5 +16,5 @@ export function getSiteUrl(): string {
     return `https://${host.replace(/\/$/, "")}`;
   }
 
-  return "https://vinculo-consciente.vercel.app";
+  return "http://localhost:3000";
 }

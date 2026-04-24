@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <div>
               <h1 className="font-heading text-xl font-bold text-foreground">Panel de administración</h1>
-              <p className="text-xs text-muted-foreground">Vínculo Consciente</p>
+              <p className="text-xs text-muted-foreground">Blogtech</p>
             </div>
           </div>
           <AdminTabs />

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Heart, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Cpu, Shield, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import PostCard from "@/components/blog/PostCard";
 import AdUnit from "@/components/AdUnit";
@@ -10,16 +10,16 @@ import { latestPostsQuery } from "@/sanity/lib/queries";
 export const revalidate = 3600;
 
 const categories = [
-  { slug: "salud-sexual", label: "Salud Sexual", icon: "✦" },
-  { slug: "relaciones", label: "Relaciones de Pareja", icon: "✦" },
-  { slug: "educacion", label: "Educación Sexual", icon: "✦" },
-  { slug: "bienestar", label: "Bienestar", icon: "✦" },
+  { slug: "tecnologia", label: "Tecnología", icon: "✦" },
+  { slug: "inteligencia-artificial", label: "Inteligencia artificial", icon: "✦" },
+  { slug: "ciberseguridad", label: "Ciberseguridad", icon: "✦" },
+  { slug: "guias", label: "Guías y herramientas", icon: "✦" },
 ];
 
 const pillars = [
-  { icon: BookOpen, title: "Basado en evidencia", desc: "Contenido respaldado por ciencia y profesionales certificados." },
-  { icon: Heart, title: "Sin tabúes", desc: "Abordamos todos los temas con respeto, apertura y precisión." },
-  { icon: Shield, title: "Espacio seguro", desc: "Tu privacidad importa. Información confiable, sin juzgar." },
+  { icon: BookOpen, title: "Fondo y contexto", desc: "Qué significa cada avance técnico y cómo te afecta en la práctica." },
+  { icon: Cpu, title: "IA y producto", desc: "Modelos, herramientas y buenas prácticas para usar la IA con criterio." },
+  { icon: Shield, title: "Seguridad primero", desc: "Amenazas, defensa en profundidad y hábitos que reducen riesgos reales." },
 ];
 
 type Post = {
@@ -45,38 +45,35 @@ export default async function HomePage() {
     <main>
       {/* ── Hero ── */}
       <section className="relative min-h-[92svh] overflow-hidden flex items-center">
-        {/* Background: layered gradient mesh */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-purple-900 to-indigo-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(139,92,246,0.5),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,rgba(167,139,250,0.2),transparent)]" />
-        {/* Floating orbs */}
-        <div aria-hidden="true" className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-violet-600/20 blur-3xl motion-safe:animate-pulse" />
-        <div aria-hidden="true" className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl motion-safe:animate-pulse motion-safe:[animation-delay:1s]" />
-        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(34,211,238,0.35),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,rgba(56,189,248,0.18),transparent)]" />
+        <div aria-hidden="true" className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-cyan-500/15 blur-3xl motion-safe:animate-pulse" />
+        <div aria-hidden="true" className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-sky-500/15 blur-3xl motion-safe:animate-pulse motion-safe:[animation-delay:1s]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-32 text-center">
-          <Badge className="mb-6 border border-violet-400/30 bg-violet-500/20 text-violet-200 hover:bg-violet-500/20 backdrop-blur-sm">
+          <Badge className="mb-6 border border-cyan-400/30 bg-cyan-500/15 text-cyan-100 hover:bg-cyan-500/15 backdrop-blur-sm">
             <Sparkles className="mr-1.5 h-3 w-3" />
-            Vínculo Consciente
+            Blogtech
           </Badge>
 
           <h1 className="mb-6 font-heading text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">
-            Tu salud sexual{" "}
-            <span className="bg-gradient-to-r from-violet-300 to-purple-200 bg-clip-text text-transparent">
-              importa
+            Tecnología, IA y{" "}
+            <span className="bg-gradient-to-r from-cyan-300 to-sky-200 bg-clip-text text-transparent">
+              ciberseguridad
             </span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-violet-200/80 md:text-xl">
-            Artículos, guías y respuestas a las preguntas que te cuesta hacer.
-            Información sexual honesta, real y sin tabúes.
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300/90 md:text-xl">
+            Artículos y guías para entender el software que nos rodea, adoptar la inteligencia artificial con criterio
+            y endurecer tu postura de seguridad sin humo ni sensacionalismo.
           </p>
 
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-violet-900 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-violet-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-cyan-50"
             >
               Explorar artículos <ArrowRight className="h-4 w-4" />
             </Link>
@@ -88,20 +85,17 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Scroll indicator */}
-          <div className="mt-20 flex flex-col items-center gap-2 text-violet-300/50">
+          <div className="mt-20 flex flex-col items-center gap-2 text-cyan-200/40">
             <span className="text-xs tracking-widest uppercase">Scroll</span>
-            <div className="h-8 w-px bg-gradient-to-b from-violet-300/50 to-transparent" />
+            <div className="h-8 w-px bg-gradient-to-b from-cyan-300/50 to-transparent" />
           </div>
         </div>
       </section>
 
-      {/* ── Ad — below hero ── */}
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <AdUnit slot="4269170269" />
+        <AdUnit />
       </div>
 
-      {/* ── Pilares ── */}
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-8 md:grid-cols-3">
@@ -118,12 +112,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Categorías ── */}
       <section id="categorias" className="py-20 bg-secondary/40">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
             <h2 className="font-heading text-3xl font-bold text-foreground">Explora por tema</h2>
-            <p className="mt-3 text-muted-foreground">Encuentra exactamente lo que necesitas</p>
+            <p className="mt-3 text-muted-foreground">Encuentra contenido alineado con lo que necesitas aprender o aplicar</p>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {categories.map((cat) => (
@@ -144,23 +137,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Ad — mid page ── */}
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <AdUnit slot="4269170269" />
+        <AdUnit />
       </div>
 
-      {/* ── Artículos recientes ── */}
       {posts.length > 0 && (
         <section className="relative overflow-hidden py-20">
-          {/* Background for glassmorphism effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-100/60 via-purple-50/40 to-indigo-100/60 dark:from-violet-950/60 dark:via-purple-900/30 dark:to-indigo-950/60" />
-          <div className="absolute top-10 left-1/4 h-72 w-72 rounded-full bg-violet-300/20 blur-3xl dark:bg-violet-600/10" />
-          <div className="absolute bottom-10 right-1/4 h-56 w-56 rounded-full bg-purple-300/20 blur-3xl dark:bg-purple-600/10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/50 via-slate-50/40 to-sky-100/50 dark:from-cyan-950/40 dark:via-slate-900/30 dark:to-sky-950/40" />
+          <div className="absolute top-10 left-1/4 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl dark:bg-cyan-600/10" />
+          <div className="absolute bottom-10 right-1/4 h-56 w-56 rounded-full bg-sky-300/20 blur-3xl dark:bg-sky-600/10" />
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="mb-12 flex items-end justify-between">
               <div>
                 <h2 className="font-heading text-3xl font-bold text-foreground">Artículos recientes</h2>
-                <p className="mt-2 text-muted-foreground">Lo último en sexología y bienestar</p>
+                <p className="mt-2 text-muted-foreground">Lo último en tecnología, IA y seguridad</p>
               </div>
               <Link href="/blog" className="hidden items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors sm:flex">
                 Ver todos <ArrowRight className="h-4 w-4" />
@@ -180,21 +170,19 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── CTA Newsletter ── */}
       <section className="relative overflow-hidden py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-purple-900 to-indigo-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(139,92,246,0.3),transparent)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(34,211,238,0.22),transparent)]" />
         <div className="relative mx-auto max-w-xl px-4 text-center">
-          <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-violet-300/60" />
-          <h2 className="mb-3 font-heading text-3xl font-bold text-white">Recibe contenido en tu correo</h2>
-          <p className="mb-8 text-violet-200/70">Artículos nuevos, guías exclusivas y respuestas a tus preguntas.</p>
+          <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-cyan-300/60" />
+          <h2 className="mb-3 font-heading text-3xl font-bold text-white">Boletín</h2>
+          <p className="mb-8 text-slate-300/80">Nuevos artículos, recursos y enlaces curados. Sin ruido.</p>
           <NewsletterForm />
         </div>
       </section>
 
-      {/* ── Ad — above footer ── */}
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <AdUnit slot="4269170269" />
+        <AdUnit />
       </div>
     </main>
   );

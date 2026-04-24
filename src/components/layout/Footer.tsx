@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { Cpu } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 export default function Footer() {
@@ -10,14 +10,14 @@ export default function Footer() {
           <div className="max-w-xs">
             <Link href="/" className="mb-4 flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+                <Cpu className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="font-heading font-semibold text-foreground">
-                Vínculo<span className="text-primary"> Consciente</span>
+                Blog<span className="text-primary">tech</span>
               </span>
             </Link>
             <p className="leading-relaxed">
-              Educación sexual basada en evidencia. Información confiable para una vida plena y saludable.
+              Tecnología, inteligencia artificial y ciberseguridad explicadas con rigor y un lenguaje accesible.
             </p>
           </div>
 
@@ -25,10 +25,10 @@ export default function Footer() {
             <div>
               <p className="mb-4 font-medium text-foreground">Temas</p>
               <ul className="space-y-2.5">
-                <li><Link href="/blog?category=salud-sexual" className="transition-colors hover:text-primary">Salud Sexual</Link></li>
-                <li><Link href="/blog?category=relaciones" className="transition-colors hover:text-primary">Relaciones</Link></li>
-                <li><Link href="/blog?category=educacion" className="transition-colors hover:text-primary">Educación</Link></li>
-                <li><Link href="/blog?category=bienestar" className="transition-colors hover:text-primary">Bienestar</Link></li>
+                <li><Link href="/blog?category=tecnologia" className="transition-colors hover:text-primary">Tecnología</Link></li>
+                <li><Link href="/blog?category=inteligencia-artificial" className="transition-colors hover:text-primary">Inteligencia artificial</Link></li>
+                <li><Link href="/blog?category=ciberseguridad" className="transition-colors hover:text-primary">Ciberseguridad</Link></li>
+                <li><Link href="/blog?category=guias" className="transition-colors hover:text-primary">Guías y herramientas</Link></li>
               </ul>
             </div>
             <div>
@@ -43,7 +43,7 @@ export default function Footer() {
 
         <Separator className="my-8" />
         <p className="text-center text-xs">
-          © {new Date().getFullYear()} Vínculo Consciente — Información con propósito educativo.
+          © {new Date().getFullYear()} Blogtech — Contenido informativo; no sustituye asesoramiento profesional especializado.
         </p>
       </div>
     </footer>

@@ -7,19 +7,17 @@ import { Badge } from "@/components/ui/badge";
 import { useRef, useState } from "react";
 
 const categoryLabels: Record<string, string> = {
-  "salud-sexual": "Salud Sexual",
-  relaciones: "Relaciones",
-  educacion: "Educación",
-  bienestar: "Bienestar",
-  faqs: "FAQs",
+  tecnologia: "Tecnología",
+  "inteligencia-artificial": "IA",
+  ciberseguridad: "Ciberseguridad",
+  guias: "Guías",
 };
 
 const categoryColors: Record<string, string> = {
-  "salud-sexual": "bg-violet-500/20 text-violet-200 border-violet-400/20",
-  relaciones: "bg-purple-500/20 text-purple-200 border-purple-400/20",
-  educacion: "bg-fuchsia-500/20 text-fuchsia-200 border-fuchsia-400/20",
-  bienestar: "bg-indigo-500/20 text-indigo-200 border-indigo-400/20",
-  faqs: "bg-white/10 text-white/70 border-white/10",
+  tecnologia: "bg-cyan-500/20 text-cyan-100 border-cyan-400/25",
+  "inteligencia-artificial": "bg-sky-500/20 text-sky-100 border-sky-400/25",
+  ciberseguridad: "bg-emerald-500/20 text-emerald-100 border-emerald-400/25",
+  guias: "bg-slate-500/25 text-slate-100 border-slate-400/20",
 };
 
 type Post = {
@@ -87,7 +85,7 @@ export default function PostCard({ post, featured }: { post: Post; featured?: bo
 
       <Link href={href} className="relative flex flex-col">
         {/* Image */}
-        <div className={`relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-violet-500/30 to-purple-600/30 ${featured ? "h-52" : "h-44"}`}>
+        <div className={`relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-cyan-600/35 to-slate-800/50 ${featured ? "h-52" : "h-44"}`}>
           {post.coverImage?.asset?.url ? (
             <Image
               src={post.coverImage.asset.url}

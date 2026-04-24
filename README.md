@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blogtech
 
-## Getting Started
+Blog sobre **tecnología**, **inteligencia artificial** y **ciberseguridad**, construido con el mismo stack que el proyecto de referencia (Next.js App Router, Sanity CMS, Supabase para auth/comentarios/newsletter y Tailwind + shadcn).
 
-First, run the development server:
+## Plan rápido
+
+1. **Clonar la base**: este repo ya está adaptado desde el blog de referencia (categorías, copy, tema visual).
+2. **Sanity**: crea un proyecto en [sanity.io/manage](https://www.sanity.io/manage), copia el `projectId` y define `NEXT_PUBLIC_SANITY_PROJECT_ID` y `NEXT_PUBLIC_SANITY_DATASET` en `.env.local`.
+3. **Supabase**: crea un proyecto (o reutiliza el tuyo), aplica las migraciones en `supabase/` si las usas, y rellena `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+4. **Contenido**: entra a `/studio`, publica artículos con las categorías *Tecnología*, *Inteligencia artificial*, *Ciberseguridad* y *Guías y herramientas*.
+5. **Producción**: despliega en Vercel (o similar), configura variables de entorno y `NEXT_PUBLIC_SITE_URL` con tu dominio.
+
+## Desarrollo local
 
 ```bash
+cp .env.example .env.local
+# Edita .env.local con tus claves
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) y el CMS en [http://localhost:3000/studio](http://localhost:3000/studio).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Opcional
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Google Analytics**: `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
+- **AdSense**: `NEXT_PUBLIC_ADSENSE_CLIENT_ID`, `NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT`, y si quieres más ubicaciones, `NEXT_PUBLIC_ADSENSE_SLOT_IN_ARTICLE` y `NEXT_PUBLIC_ADSENSE_SLOT_MID`. Si no las defines, los bloques de anuncio no se renderizan.
+- **Ads.txt**: cuando AdSense te dé la línea exacta, crea `public/ads.txt` en la raíz del sitio público.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando     | Descripción              |
+|------------|---------------------------|
+| `npm run dev`   | Servidor de desarrollo   |
+| `npm run build` | Build de producción     |
+| `npm run start` | Servidor tras el build  |
+| `npm run lint`  | ESLint                    |

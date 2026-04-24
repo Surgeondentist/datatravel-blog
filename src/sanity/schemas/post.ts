@@ -39,11 +39,10 @@ export const post = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Salud Sexual", value: "salud-sexual" },
-          { title: "Relaciones de Pareja", value: "relaciones" },
-          { title: "Educación Sexual", value: "educacion" },
-          { title: "Bienestar", value: "bienestar" },
-          { title: "Consultas Frecuentes", value: "faqs" },
+          { title: "Tecnología", value: "tecnologia" },
+          { title: "Inteligencia artificial", value: "inteligencia-artificial" },
+          { title: "Ciberseguridad", value: "ciberseguridad" },
+          { title: "Guías y herramientas", value: "guias" },
         ],
       },
     }),

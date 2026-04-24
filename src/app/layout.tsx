@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lora, Raleway } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -7,59 +7,70 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AdSenseScript from "@/components/AdSenseScript";
 
-const lora = Lora({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
-const raleway = Raleway({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
+const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim();
+
 export const metadata: Metadata = {
   title: {
-    default: "Vínculo Consciente — Sexología y bienestar sexual",
-    template: "%s | Vínculo Consciente",
+    default: "Blogtech — Tecnología, IA y ciberseguridad",
+    template: "%s | Blogtech",
   },
   description:
-    "Artículos de sexología, salud sexual y relaciones de pareja. Información basada en evidencia, honesta y sin tabúes.",
-  keywords: ["sexología", "vínculo consciente", "salud sexual", "educación sexual", "relaciones de pareja", "bienestar"],
+    "Artículos sobre tecnología, inteligencia artificial y ciberseguridad. Análisis claros, buenas prácticas y herramientas para mantenerte al día.",
+  keywords: [
+    "tecnología",
+    "inteligencia artificial",
+    "ciberseguridad",
+    "IA",
+    "privacidad",
+    "blog técnico",
+  ],
   openGraph: {
-    siteName: "Vínculo Consciente",
+    siteName: "Blogtech",
     locale: "es_ES",
     type: "website",
   },
-  other: {
-    "google-adsense-account": "ca-pub-4094870352712876",
-  },
+  ...(adsenseClient
+    ? { other: { "google-adsense-account": adsenseClient } as Record<string, string> }
+    : {}),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="es"
-      className={`${lora.variable} ${raleway.variable} h-full`}
+      className={`${jetbrainsMono.variable} ${inter.variable} h-full`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-3BJ2C3CK6M"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
+        {gaId ? (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-3BJ2C3CK6M');
+            gtag('config', '${gaId}');
           `}
-        </Script>
+            </Script>
+          </>
+        ) : null}
       </head>
       <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
         <AdSenseScript />
