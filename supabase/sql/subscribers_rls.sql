@@ -1,5 +1,7 @@
--- Ejecutar en Supabase → SQL Editor (una vez).
--- Corrige el panel de suscriptores: permite INSERT público (newsletter) y SELECT solo para admins.
+-- (Opcional) Políticas solo de newsletter si ya creaste tablas a mano.
+-- Para instalaciones nuevas, usa el script completo:
+--   supabase/sql/datatravel_full_setup.sql
+-- (incluye subscribers + RLS + el resto del esquema).
 
 ALTER TABLE public.subscribers ENABLE ROW LEVEL SECURITY;
 
