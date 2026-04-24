@@ -3,11 +3,18 @@ import "server-only";
 
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
 
 export async function enviarNewsletter(
   subject: string,
   htmlContent: string
 ): Promise<{ sent: number } | { error: string }> {
+  const subjectTrim = subject.trim();
+  const htmlTrim = htmlContent.trim();
+  if (!subjectTrim) return { error: "Subject is required" };
+  if (!htmlTrim) return { error: "Email body is required" };
+  if (subjectTrim.length > 200) return { error: "Subject is too long (max 200 characters)" };
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -26,7 +33,8 @@ export async function enviarNewsletter(
 
   const from = process.env.RESEND_FROM ?? "Redshell <newsletter@redshell.cloud>";
 
-  const { data: subscribers, error: dbError } = await supabase
+  const db = createServiceRoleClient() ?? supabase;
+  const { data: subscribers, error: dbError } = await db
     .from("subscribers")
     .select("email")
     .eq("confirmed", true);
@@ -39,8 +47,8 @@ export async function enviarNewsletter(
   const emails = subscribers.map((s) => ({
     from,
     to: s.email as string,
-    subject,
-    html: htmlContent,
+    subject: subjectTrim,
+    html: htmlTrim,
   }));
 
   // Resend batch limit is 100 per call

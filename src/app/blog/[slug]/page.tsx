@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import AdUnit from "@/components/AdUnit";
 import CommentSection from "@/components/comments/CommentSection";
+import NewsletterSection from "@/components/NewsletterSection";
 import type { Metadata } from "next";
 
 export const revalidate = 3600;
@@ -156,6 +157,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
         ) : null}
       </article>
+
+      <NewsletterSection />
 
       {/* Comments */}
       <div className="mx-auto max-w-3xl px-4 pb-4">

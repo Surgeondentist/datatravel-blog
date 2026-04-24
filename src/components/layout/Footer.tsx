@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import BrandLogo from "@/components/brand/BrandLogo";
+import NewsletterForm from "@/components/NewsletterForm";
 
 export default function Footer() {
   return (
@@ -16,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex gap-16">
+          <div className="flex flex-col gap-10 sm:flex-row sm:flex-wrap sm:gap-16 lg:gap-20">
             <div>
               <p className="mb-4 font-medium text-foreground">Topics</p>
               <ul className="space-y-2.5">
@@ -32,6 +33,13 @@ export default function Footer() {
                 <li><Link href="/privacy" className="transition-colors hover:text-primary">Privacy</Link></li>
                 <li><Link href="/legal" className="transition-colors hover:text-primary">Legal notice</Link></li>
               </ul>
+            </div>
+            <div className="max-w-xs sm:max-w-[220px]">
+              <p className="mb-4 font-medium text-foreground">Newsletter</p>
+              <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
+                Occasional updates—new posts and links we find useful.
+              </p>
+              <NewsletterForm variant="card" />
             </div>
           </div>
         </div>

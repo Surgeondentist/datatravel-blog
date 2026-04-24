@@ -184,7 +184,7 @@ export default async function HomePage() {
           <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-cyan-300/60" />
           <h2 className="mb-3 font-heading text-3xl font-bold text-white">Newsletter</h2>
           <p className="mb-8 text-slate-300/80">New articles, resources, and curated links. No fluff.</p>
-          <NewsletterForm />
+          <NewsletterForm variant="hero" />
         </div>
       </section>
 

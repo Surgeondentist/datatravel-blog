@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { postsQuery, postsByCategory } from "@/sanity/lib/queries";
 import PostCard from "@/components/blog/PostCard";
+import NewsletterSection from "@/components/NewsletterSection";
 import AdUnit from "@/components/AdUnit";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -88,12 +89,14 @@ export default async function BlogPage({
             <p className="text-lg text-muted-foreground">No posts in this category yet. Publish from Sanity Studio.</p>
           </div>
         ) : (
-          <div className="grid gap-6 pb-16 pt-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 pb-12 pt-4 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, i) => (
               <PostCard key={post._id} post={post} featured={i === 0} />
             ))}
           </div>
         )}
+
+        <NewsletterSection />
 
         <div className="pb-8">
           <AdUnit />
