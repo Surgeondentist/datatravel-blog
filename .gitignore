@@ -34,6 +34,10 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local editor / agent (no versionar)
+.cursor/
+.claude/
+
 # vercel
 .vercel
 
