@@ -9,10 +9,11 @@ import UserMenu from "@/components/layout/UserMenu";
 import BrandLogo from "@/components/brand/BrandLogo";
 
 const navLinks = [
-  { href: "/blog", label: "Artículos" },
-  { href: "/blog?category=tecnologia", label: "Tecnología" },
-  { href: "/blog?category=inteligencia-artificial", label: "IA" },
-  { href: "/blog?category=ciberseguridad", label: "Ciberseguridad" },
+  { href: "/blog", label: "Articles" },
+  { href: "/blog?category=tecnologia", label: "Technology" },
+  { href: "/blog?category=inteligencia-artificial", label: "AI" },
+  { href: "/blog?category=ciberseguridad", label: "Cybersecurity" },
+  { href: "/blog?category=guias", label: "Guides" },
 ];
 
 function ThemeToggle() {
@@ -21,7 +22,7 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground cursor-pointer"
-      aria-label="Cambiar tema"
+      aria-label="Toggle theme"
     >
       <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -55,7 +56,7 @@ export default function Navbar() {
           <ThemeToggle />
           <UserMenu />
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger aria-label={open ? "Cerrar menú" : "Abrir menú"} className="md:hidden flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary cursor-pointer">
+            <SheetTrigger aria-label={open ? "Close menu" : "Open menu"} className="md:hidden flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-secondary cursor-pointer">
               {open ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
             </SheetTrigger>
             <SheetContent side="right" className="w-72 pt-12 bg-background">

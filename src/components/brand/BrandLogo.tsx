@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-/** Alturas visibles (PNG con transparencia; sin caja de fondo). */
+/** Visible heights (transparent PNG; no background box). */
 const sizeClass = {
   sm: "h-9 w-auto max-w-[180px] sm:h-10 sm:max-w-[200px]",
   md: "h-10 w-auto max-w-[220px] sm:h-11 sm:max-w-[260px]",
@@ -13,7 +13,7 @@ type BrandLogoProps = {
   priority?: boolean;
 };
 
-/** Logo de marca (`/redshell-logo.png`, PNG con transparencia). */
+/** Brand logo (`/redshell-logo.png`, transparent PNG). */
 export default function BrandLogo({ size = "md", className = "", priority = false }: BrandLogoProps) {
   return (
     <span className={`inline-flex shrink-0 items-center ${className}`}>

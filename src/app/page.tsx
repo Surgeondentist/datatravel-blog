@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 };
 
 const categories = [
-  { slug: "tecnologia", label: "Tecnología", icon: "✦" },
-  { slug: "inteligencia-artificial", label: "Inteligencia artificial", icon: "✦" },
-  { slug: "ciberseguridad", label: "Ciberseguridad", icon: "✦" },
-  { slug: "guias", label: "Guías y herramientas", icon: "✦" },
+  { slug: "tecnologia", label: "Technology", icon: "✦" },
+  { slug: "inteligencia-artificial", label: "Artificial intelligence", icon: "✦" },
+  { slug: "ciberseguridad", label: "Cybersecurity", icon: "✦" },
+  { slug: "guias", label: "Guides & tools", icon: "✦" },
 ];
 
 const pillars = [
-  { icon: BookOpen, title: "Fondo y contexto", desc: "Qué significa cada avance técnico y cómo te afecta en la práctica." },
-  { icon: Cpu, title: "IA y producto", desc: "Modelos, herramientas y buenas prácticas para usar la IA con criterio." },
-  { icon: Shield, title: "Seguridad primero", desc: "Amenazas, defensa en profundidad y hábitos que reducen riesgos reales." },
+  { icon: BookOpen, title: "Depth & context", desc: "What each technical shift means and how it affects you in practice." },
+  { icon: Cpu, title: "AI & product", desc: "Models, tools, and habits for using AI with judgment." },
+  { icon: Shield, title: "Security first", desc: "Threats, defense in depth, and habits that reduce real risk." },
 ];
 
 type Post = {
@@ -66,15 +66,15 @@ export default async function HomePage() {
           </div>
 
           <h1 className="mb-6 font-heading text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">
-            Tecnología, IA y{" "}
+            Technology, AI &{" "}
             <span className="bg-gradient-to-r from-cyan-300 to-sky-200 bg-clip-text text-transparent">
-              ciberseguridad
+              cybersecurity
             </span>
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300/90 md:text-xl">
-            Artículos y guías para entender el software que nos rodea, adoptar la inteligencia artificial con criterio
-            y endurecer tu postura de seguridad sin humo ni sensacionalismo.
+            Articles and guides to understand the software around us, adopt artificial intelligence with judgment, and
+            harden your security posture—without hype or sensationalism.
           </p>
 
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -82,13 +82,13 @@ export default async function HomePage() {
               href="/blog"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-cyan-50"
             >
-              Explorar artículos <ArrowRight className="h-4 w-4" />
+              Browse articles <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="#categorias"
+              href="#topics"
               className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10 hover:text-white"
             >
-              Ver categorías
+              Browse topics
             </Link>
           </div>
 
@@ -119,11 +119,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section id="categorias" className="py-20 bg-secondary/40">
+      <section id="topics" className="py-20 bg-secondary/40">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
-            <h2 className="font-heading text-3xl font-bold text-foreground">Explora por tema</h2>
-            <p className="mt-3 text-muted-foreground">Encuentra contenido alineado con lo que necesitas aprender o aplicar</p>
+            <h2 className="font-heading text-3xl font-bold text-foreground">Explore by topic</h2>
+            <p className="mt-3 text-muted-foreground">Find content aligned with what you want to learn or ship</p>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {categories.map((cat) => (
@@ -156,11 +156,11 @@ export default async function HomePage() {
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="mb-12 flex items-end justify-between">
               <div>
-                <h2 className="font-heading text-3xl font-bold text-foreground">Artículos recientes</h2>
-                <p className="mt-2 text-muted-foreground">Lo último en tecnología, IA y seguridad</p>
+                <h2 className="font-heading text-3xl font-bold text-foreground">Latest articles</h2>
+                <p className="mt-2 text-muted-foreground">Fresh takes on technology, AI, and security</p>
               </div>
               <Link href="/blog" className="hidden items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors sm:flex">
-                Ver todos <ArrowRight className="h-4 w-4" />
+                View all <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -170,7 +170,7 @@ export default async function HomePage() {
             </div>
             <div className="mt-8 flex justify-center sm:hidden">
               <Link href="/blog" className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors">
-                Ver todos los artículos <ArrowRight className="h-4 w-4" />
+                View all articles <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -182,8 +182,8 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(34,211,238,0.22),transparent)]" />
         <div className="relative mx-auto max-w-xl px-4 text-center">
           <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-cyan-300/60" />
-          <h2 className="mb-3 font-heading text-3xl font-bold text-white">Boletín</h2>
-          <p className="mb-8 text-slate-300/80">Nuevos artículos, recursos y enlaces curados. Sin ruido.</p>
+          <h2 className="mb-3 font-heading text-3xl font-bold text-white">Newsletter</h2>
+          <p className="mb-8 text-slate-300/80">New articles, resources, and curated links. No fluff.</p>
           <NewsletterForm />
         </div>
       </section>

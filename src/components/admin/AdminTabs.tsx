@@ -5,16 +5,16 @@ import { usePathname } from "next/navigation";
 import { MessageSquare, Megaphone, Users } from "lucide-react";
 
 const tabs = [
-  { href: "/admin/comentarios",  label: "Comentarios",  icon: MessageSquare },
-  { href: "/admin/suscriptores", label: "Suscriptores", icon: Users },
-  { href: "/admin/amplificar",   label: "Amplificar",   icon: Megaphone },
+  { href: "/admin/comentarios", label: "Comments", icon: MessageSquare },
+  { href: "/admin/suscriptores", label: "Subscribers", icon: Users },
+  { href: "/admin/amplificar", label: "Amplify", icon: Megaphone },
 ];
 
 export default function AdminTabs() {
   const pathname = usePathname();
 
   return (
-    <nav className="mt-5 flex gap-1" aria-label="Secciones de administración">
+    <nav className="mt-5 flex gap-1" aria-label="Admin sections">
       {tabs.map(({ href, label, icon: Icon }) => {
         const isActive = pathname.startsWith(href);
         return (

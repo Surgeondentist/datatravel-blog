@@ -12,19 +12,19 @@ function containsBannedWords(text: string): boolean {
 }
 
 export async function submitComment(postSlug: string, body: string) {
-  if (!body || body.trim().length < 2) return { error: "El comentario es demasiado corto." };
-  if (body.trim().length > 1000) return { error: "Máximo 1000 caracteres." };
-  if (containsBannedWords(body)) return { error: "Tu comentario contiene contenido no permitido." };
+  if (!body || body.trim().length < 2) return { error: "Comment is too short." };
+  if (body.trim().length > 1000) return { error: "Maximum 1000 characters." };
+  if (containsBannedWords(body)) return { error: "Your comment contains disallowed content." };
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Debes iniciar sesión para comentar." };
+  if (!user) return { error: "You must be signed in to comment." };
 
   const allowed = await rateLimitSubmitComment(user.id);
-  if (!allowed) return { error: "Demasiados comentarios en poco tiempo. Espera unos minutos." };
+  if (!allowed) return { error: "Too many comments in a short time. Please wait a few minutes." };
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-  if (profile?.role === "banned") return { error: "Tu cuenta no puede publicar comentarios." };
+  if (profile?.role === "banned") return { error: "Your account cannot post comments." };
 
   const { error } = await supabase.from("comments").insert({
     user_id: user.id,
@@ -33,7 +33,7 @@ export async function submitComment(postSlug: string, body: string) {
     status: "pending",
   });
 
-  if (error) return { error: "Error al enviar el comentario." };
+  if (error) return { error: "Could not submit your comment." };
   revalidatePath(`/blog/${postSlug}`);
   return { success: true };
 }
@@ -41,10 +41,10 @@ export async function submitComment(postSlug: string, body: string) {
 export async function reportComment(commentId: string, reason: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Debes iniciar sesión." };
+  if (!user) return { error: "You must be signed in." };
 
   const allowed = await rateLimitReportComment(user.id);
-  if (!allowed) return { error: "Demasiados reportes en poco tiempo. Prueba más tarde." };
+  if (!allowed) return { error: "Too many reports in a short time. Try again later." };
 
   const { error } = await supabase.from("reports").insert({
     comment_id: commentId,
@@ -52,21 +52,21 @@ export async function reportComment(commentId: string, reason: string) {
     reason: reason.trim(),
   });
 
-  if (error?.code === "23505") return { error: "Ya reportaste este comentario." };
-  if (error) return { error: "Error al reportar." };
+  if (error?.code === "23505") return { error: "You have already reported this comment." };
+  if (error) return { error: "Could not submit report." };
   return { success: true };
 }
 
 export async function moderateComment(commentId: string, status: "published" | "rejected") {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "No autorizado." };
+  if (!user) return { error: "Unauthorized." };
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-  if (profile?.role !== "admin") return { error: "No autorizado." };
+  if (profile?.role !== "admin") return { error: "Unauthorized." };
 
   const { error } = await supabase.from("comments").update({ status }).eq("id", commentId);
-  if (error) return { error: "Error al moderar." };
+  if (error) return { error: "Could not update comment." };
   revalidatePath("/admin/comentarios");
   return { success: true };
 }
@@ -74,13 +74,13 @@ export async function moderateComment(commentId: string, status: "published" | "
 export async function deleteComment(commentId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "No autorizado." };
+  if (!user) return { error: "Unauthorized." };
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-  if (profile?.role !== "admin") return { error: "No autorizado." };
+  if (profile?.role !== "admin") return { error: "Unauthorized." };
 
   const { error } = await supabase.from("comments").delete().eq("id", commentId);
-  if (error) return { error: "Error al eliminar." };
+  if (error) return { error: "Could not delete comment." };
   revalidatePath("/admin/comentarios");
   return { success: true };
 }

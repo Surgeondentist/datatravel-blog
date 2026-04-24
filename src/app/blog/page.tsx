@@ -8,17 +8,17 @@ import type { Metadata } from "next";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Artículos",
-  description: "Todos los artículos sobre tecnología, inteligencia artificial y ciberseguridad.",
+  title: "Articles",
+  description: "All articles on technology, artificial intelligence, and cybersecurity.",
   alternates: { canonical: "/blog" },
 };
 
 const categories = [
-  { slug: "", label: "Todos" },
-  { slug: "tecnologia", label: "Tecnología" },
-  { slug: "inteligencia-artificial", label: "IA" },
-  { slug: "ciberseguridad", label: "Ciberseguridad" },
-  { slug: "guias", label: "Guías" },
+  { slug: "", label: "All" },
+  { slug: "tecnologia", label: "Technology" },
+  { slug: "inteligencia-artificial", label: "AI" },
+  { slug: "ciberseguridad", label: "Cybersecurity" },
+  { slug: "guias", label: "Guides" },
 ];
 
 type Post = {
@@ -48,16 +48,16 @@ export default async function BlogPage({
     posts = [];
   }
 
-  const activeLabel = categories.find((c) => c.slug === (category ?? ""))?.label ?? "Artículos";
+  const activeLabel = categories.find((c) => c.slug === (category ?? ""))?.label ?? "Articles";
 
   return (
     <main>
       <section className="border-b border-border bg-secondary/30 py-16">
         <div className="mx-auto max-w-6xl px-4 text-center">
           <h1 className="font-heading text-4xl font-bold text-foreground md:text-5xl">
-            {category ? activeLabel : "Todos los artículos"}
+            {category ? activeLabel : "All articles"}
           </h1>
-          <p className="mt-4 text-muted-foreground">Análisis, guías y buenas prácticas para equipos y curiosos técnicos.</p>
+          <p className="mt-4 text-muted-foreground">Analysis, guides, and practical notes for builders and the technically curious.</p>
         </div>
       </section>
 
@@ -85,7 +85,7 @@ export default async function BlogPage({
 
         {posts.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="text-lg text-muted-foreground">Aún no hay artículos en esta categoría. Publica desde Sanity Studio.</p>
+            <p className="text-lg text-muted-foreground">No posts in this category yet. Publish from Sanity Studio.</p>
           </div>
         ) : (
           <div className="grid gap-6 pb-16 pt-4 sm:grid-cols-2 lg:grid-cols-3">

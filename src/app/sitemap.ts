@@ -3,7 +3,7 @@ import { client } from "@/sanity/lib/client";
 import { postsQuery } from "@/sanity/lib/queries";
 import { getSiteUrl } from "@/lib/site";
 
-/** ISR del índice de URLs (alineado con páginas de blog). */
+/** Sitemap ISR (aligned with blog pages). */
 export const revalidate = 3600;
 
 type Post = { slug: { current: string }; publishedAt?: string };
@@ -24,8 +24,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: base, lastModified: now, changeFrequency: "daily", priority: 1 },
     { url: `${base}/blog`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${base}/privacidad`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/aviso-legal`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/legal`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     ...withSlug.map((post) => ({
       url: `${base}/blog/${post.slug!.current}`,
       lastModified: post.publishedAt ? new Date(post.publishedAt) : now,

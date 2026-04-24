@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Error de acceso", robots: { index: false } };
+export const metadata: Metadata = { title: "Sign-in error", robots: { index: false } };
 
 export default async function AuthErrorPage({
   searchParams,
@@ -15,22 +15,22 @@ export default async function AuthErrorPage({
   const exchangeFail = reason === "exchange";
 
   let message =
-    "Algo falló al iniciar sesión. Prueba de nuevo o contacta si el problema continúa.";
+    "Something went wrong while signing in. Try again or contact us if it keeps happening.";
   if (rateLimited) {
-    message = "Se alcanzó el límite de intentos desde esta red. Espera unos minutos y vuelve a intentarlo.";
+    message = "Too many attempts from this network. Wait a few minutes and try again.";
   } else if (missingCode) {
     message =
-      "No llegó el código de autorización. Revisa en Google Cloud que la URI de redirección sea la de Supabase (…/auth/v1/callback) y en Supabase las URLs permitidas incluyan /auth/callback.";
+      "The authorization code did not arrive. In Google Cloud, ensure the redirect URI matches Supabase (…/auth/v1/callback) and in Supabase allowlisted URLs include /auth/callback.";
   } else if (oauthFail || exchangeFail) {
     message =
       oauthFail
-        ? "Google o Supabase rechazaron la petición de acceso. Detalle técnico abajo (útil para corregir la configuración)."
-        : "No se pudo crear la sesión. Revisa que el proveedor Google esté activo en Supabase y que Client ID/Secret coincidan con Google Cloud.";
+        ? "Google or Supabase rejected the sign-in request. Technical detail below (useful to fix configuration)."
+        : "Could not create a session. Check that the Google provider is enabled in Supabase and Client ID/Secret match Google Cloud.";
   }
 
   return (
     <main className="mx-auto max-w-md px-4 py-24 text-center">
-      <h1 className="font-heading text-2xl font-bold text-foreground">No se pudo completar el acceso</h1>
+      <h1 className="font-heading text-2xl font-bold text-foreground">Sign-in could not be completed</h1>
       <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{message}</p>
       {(detail || oauthCode) && (
         <pre className="mt-6 overflow-x-auto rounded-lg border border-border bg-muted/50 p-3 text-left text-xs text-muted-foreground break-words whitespace-pre-wrap">
@@ -39,7 +39,7 @@ export default async function AuthErrorPage({
         </pre>
       )}
       <Link href="/" className="mt-8 inline-block text-sm font-medium text-primary hover:underline">
-        Volver al inicio
+        Back to home
       </Link>
     </main>
   );

@@ -19,7 +19,7 @@ export default function NewsletterForm() {
         setEmail("");
       } else {
         setStatus("error");
-        setMessage(result.error ?? "Error desconocido.");
+        setMessage(result.error ?? "Unknown error.");
       }
     });
   }
@@ -30,22 +30,22 @@ export default function NewsletterForm() {
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
           <CheckCircle2 className="h-7 w-7 text-white" />
         </div>
-        <p className="font-heading text-lg font-semibold text-white">¡Ya estás suscrito!</p>
-        <p className="text-sm text-violet-200/70">Te avisaremos cuando publiquemos nuevo contenido.</p>
+        <p className="font-heading text-lg font-semibold text-white">You&apos;re subscribed</p>
+        <p className="text-sm text-violet-200/70">We&apos;ll let you know when we publish new content.</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
-      <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
+      <label htmlFor="newsletter-email" className="sr-only">Email address</label>
       <input
         id="newsletter-email"
         type="email"
         autoComplete="email"
         value={email}
         onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
-        placeholder="tu@correo.com"
+        placeholder="you@example.com"
         required
         disabled={isPending}
         className="flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder-violet-300/50 outline-none backdrop-blur-sm transition focus:border-violet-400 focus:ring-1 focus:ring-violet-400 disabled:opacity-60"
@@ -60,7 +60,7 @@ export default function NewsletterForm() {
         ) : (
           <Send className="h-4 w-4" />
         )}
-        {isPending ? "Enviando..." : "Suscribirme"}
+        {isPending ? "Sending..." : "Subscribe"}
       </button>
       {status === "error" && (
         <p className="w-full text-center text-sm text-red-300 sm:col-span-2">{message}</p>

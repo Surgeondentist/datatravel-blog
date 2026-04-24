@@ -7,9 +7,9 @@ import { generarContenido, type Formato } from "@/app/actions/amplificar";
 type Post = { _id: string; title: string; slug: { current: string } };
 
 const formatos: { id: Formato; label: string; icon: React.ElementType; descripcion: string }[] = [
-  { id: "twitter",     label: "Hilo de Twitter/X",   icon: Hash,    descripcion: "6-10 tuits optimizados" },
-  { id: "newsletter",  label: "Email newsletter",     icon: Mail,    descripcion: "Email de promoción" },
-  { id: "reels",       label: "Guion de Reels",       icon: Play,    descripcion: "60-90 segundos" },
+  { id: "twitter", label: "Twitter/X thread", icon: Hash, descripcion: "6–10 optimized tweets" },
+  { id: "newsletter", label: "Newsletter email", icon: Mail, descripcion: "Promo email draft" },
+  { id: "reels", label: "Reels script", icon: Play, descripcion: "60–90 seconds" },
 ];
 
 export default function AmplificarPanel({ posts }: { posts: Post[] }) {
@@ -20,7 +20,7 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
   const [copiado, setCopiado] = useState(false);
 
   async function generar(formato: Formato) {
-    if (!slug) { setError("Selecciona un artículo primero"); return; }
+    if (!slug) { setError("Select a post first"); return; }
     setError("");
     setResultado("");
     setCargando(formato);
@@ -29,7 +29,7 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
     setCargando(null);
 
     if ("error" in res) { setError(res.error); return; }
-    setResultado(res.contenido);
+    setResultado(res.content);
   }
 
   async function copiar() {
@@ -41,16 +41,16 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-heading text-lg font-bold text-foreground">Distribución y amplificación</h2>
+        <h2 className="font-heading text-lg font-bold text-foreground">Distribution & amplification</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Selecciona un artículo y genera contenido listo para publicar en redes o newsletter.
+          Pick a post and generate copy ready for social or your newsletter.
         </p>
       </div>
 
-      {/* Selector de artículo */}
+      {/* Post selector */}
       <div className="space-y-2">
         <label htmlFor="post-select" className="text-sm font-medium text-foreground">
-          Artículo
+          Post
         </label>
         <select
           id="post-select"
@@ -58,7 +58,7 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
           onChange={(e) => { setSlug(e.target.value); setResultado(""); setError(""); }}
           className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
-          <option value="">— Selecciona un artículo —</option>
+          <option value="">— Select a post —</option>
           {posts.map((p) => (
             <option key={p._id} value={p.slug.current}>
               {p.title}
@@ -100,15 +100,15 @@ export default function AmplificarPanel({ posts }: { posts: Post[] }) {
       {resultado && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-foreground">Resultado</span>
+            <span className="text-sm font-medium text-foreground">Output</span>
             <button
               onClick={copiar}
               className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {copiado ? (
-                <><Check className="h-3.5 w-3.5 text-green-500" /> Copiado</>
+                <><Check className="h-3.5 w-3.5 text-green-500" /> Copied</>
               ) : (
-                <><Copy className="h-3.5 w-3.5" /> Copiar</>
+                <><Copy className="h-3.5 w-3.5" /> Copy</>
               )}
             </button>
           </div>

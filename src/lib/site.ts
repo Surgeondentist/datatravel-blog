@@ -1,10 +1,10 @@
 /**
- * URL canónica del sitio (sin barra final).
+ * Canonical site URL (no trailing slash).
  *
- * Configura en `.env.local` / variables de Vercel (producción en apex):
+ * Set in `.env.local` / Vercel env (production apex):
  * `NEXT_PUBLIC_SITE_URL=https://redshell.cloud`
  *
- * Si no está definida, en Vercel se usa `VERCEL_URL`. Último recurso: el despliegue por defecto.
+ * If unset, Vercel uses `VERCEL_URL`. Fallback: localhost.
  */
 export function getSiteUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();

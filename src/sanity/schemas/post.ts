@@ -2,12 +2,12 @@ import { defineField, defineType } from "sanity";
 
 export const post = defineType({
   name: "post",
-  title: "Artículo",
+  title: "Post",
   type: "document",
   fields: [
     defineField({
       name: "title",
-      title: "Título",
+      title: "Title",
       type: "string",
       validation: (r) => r.required(),
     }),
@@ -20,45 +20,45 @@ export const post = defineType({
     }),
     defineField({
       name: "excerpt",
-      title: "Resumen",
+      title: "Excerpt",
       type: "text",
       rows: 3,
     }),
     defineField({
       name: "coverImage",
-      title: "Imagen de portada",
+      title: "Cover image",
       type: "image",
       options: { hotspot: true },
       fields: [
-        defineField({ name: "alt", title: "Texto alternativo", type: "string" }),
+        defineField({ name: "alt", title: "Alt text", type: "string" }),
       ],
     }),
     defineField({
       name: "category",
-      title: "Categoría",
+      title: "Category",
       type: "string",
       options: {
         list: [
-          { title: "Tecnología", value: "tecnologia" },
-          { title: "Inteligencia artificial", value: "inteligencia-artificial" },
-          { title: "Ciberseguridad", value: "ciberseguridad" },
-          { title: "Guías y herramientas", value: "guias" },
+          { title: "Technology", value: "tecnologia" },
+          { title: "Artificial intelligence", value: "inteligencia-artificial" },
+          { title: "Cybersecurity", value: "ciberseguridad" },
+          { title: "Guides & tools", value: "guias" },
         ],
       },
     }),
     defineField({
       name: "readTime",
-      title: "Tiempo de lectura (min)",
+      title: "Reading time (minutes)",
       type: "number",
     }),
     defineField({
       name: "publishedAt",
-      title: "Fecha de publicación",
+      title: "Published at",
       type: "datetime",
     }),
     defineField({
       name: "body",
-      title: "Contenido",
+      title: "Body",
       type: "array",
       of: [
         { type: "block" },
@@ -66,21 +66,21 @@ export const post = defineType({
           type: "image",
           options: { hotspot: true },
           fields: [
-            defineField({ name: "alt", title: "Texto alternativo", type: "string" }),
-            defineField({ name: "caption", title: "Leyenda", type: "string" }),
+            defineField({ name: "alt", title: "Alt text", type: "string" }),
+            defineField({ name: "caption", title: "Caption", type: "string" }),
           ],
         },
       ],
     }),
     defineField({
       name: "seoTitle",
-      title: "SEO: Título",
+      title: "SEO title",
       type: "string",
-      description: "Dejar vacío para usar el título del artículo",
+      description: "Leave empty to use the post title",
     }),
     defineField({
       name: "seoDescription",
-      title: "SEO: Descripción",
+      title: "SEO description",
       type: "text",
       rows: 2,
     }),

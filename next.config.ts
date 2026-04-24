@@ -66,6 +66,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/privacidad", destination: "/privacy", permanent: true },
+      { source: "/aviso-legal", destination: "/legal", permanent: true },
       {
         source: "/studio",
         destination: "https://redshell.sanity.studio",

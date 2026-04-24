@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Mail, Users, Calendar } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Admin — Suscriptores" };
+export const metadata: Metadata = { title: "Admin — Subscribers" };
 
 type Subscriber = {
   id: string;
@@ -47,21 +47,21 @@ export default async function AdminSubscribersPage() {
   const confirmed = subscribers?.filter((s) => s.confirmed).length ?? 0;
 
   const date = (iso: string) =>
-    new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+    new Date(iso).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
 
   return (
     <div>
       {loadError && (
         <div className="mb-6 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          No se pudieron cargar los suscriptores: {loadError}. Si usas RLS, ejecuta el SQL en{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">supabase/sql/subscribers_rls.sql</code> o define{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> solo en el servidor (Vercel).
+          Could not load subscribers: {loadError}. If you use RLS, run the SQL in{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">supabase/sql/subscribers_rls.sql</code> or set{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> on the server only (Vercel).
         </div>
       )}
 
       {/* Header + stats */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-heading text-2xl font-bold text-foreground">Suscriptores</h2>
+        <h2 className="font-heading text-2xl font-bold text-foreground">Subscribers</h2>
         <div className="flex gap-3">
           <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm">
             <Users className="h-4 w-4 text-primary" />
@@ -71,7 +71,7 @@ export default async function AdminSubscribersPage() {
           <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm">
             <Mail className="h-4 w-4 text-green-500" />
             <span className="font-semibold text-foreground">{confirmed}</span>
-            <span className="text-muted-foreground">confirmados</span>
+            <span className="text-muted-foreground">confirmed</span>
           </div>
         </div>
       </div>
@@ -79,11 +79,11 @@ export default async function AdminSubscribersPage() {
       {total === 0 && !loadError ? (
         <div className="rounded-2xl border border-border bg-card p-12 text-center text-muted-foreground">
           <Mail className="mx-auto mb-3 h-10 w-10 opacity-30" />
-          <p className="font-medium">Aún no hay suscriptores visibles.</p>
+          <p className="font-medium">No subscribers visible yet.</p>
           <p className="mt-1 text-sm">
-            Si ya te suscribiste y no aparece tu correo, Supabase suele estar bloqueando la lectura (RLS). Añade{" "}
-            <code className="rounded bg-muted px-1 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> en Vercel o ejecuta{" "}
-            <code className="rounded bg-muted px-1 text-xs">supabase/sql/subscribers_rls.sql</code> en el SQL Editor.
+            If you subscribed but your email does not appear, Supabase is likely blocking reads (RLS). Add{" "}
+            <code className="rounded bg-muted px-1 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> in Vercel or run{" "}
+            <code className="rounded bg-muted px-1 text-xs">supabase/sql/subscribers_rls.sql</code> in the SQL Editor.
           </p>
         </div>
       ) : total === 0 ? null : (
@@ -91,11 +91,11 @@ export default async function AdminSubscribersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-secondary/50">
-                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Correo</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Estado</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Email</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-foreground">Status</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-foreground">
                   <span className="flex items-center gap-1.5">
-                    <Calendar className="h-3.5 w-3.5" /> Fecha
+                    <Calendar className="h-3.5 w-3.5" /> Date
                   </span>
                 </th>
               </tr>
@@ -113,7 +113,7 @@ export default async function AdminSubscribersPage() {
                       }`}
                     >
                       <span className={`h-1.5 w-1.5 rounded-full ${s.confirmed ? "bg-green-500" : "bg-muted-foreground/50"}`} />
-                      {s.confirmed ? "Confirmado" : "Pendiente"}
+                      {s.confirmed ? "Confirmed" : "Pending"}
                     </span>
                   </td>
                   <td className="px-5 py-3.5 text-muted-foreground">{date(s.created_at)}</td>

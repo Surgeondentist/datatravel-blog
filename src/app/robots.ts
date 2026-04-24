@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/site";
 
 /**
- * robots.txt nativo (App Router). No listar rutas privadas ni handlers que no aportan SEO.
+ * App Router robots.txt. Do not list private routes or non-SEO handlers.
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
  */
 export default function robots(): MetadataRoute.Robots {

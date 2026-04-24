@@ -68,27 +68,27 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         setMessage({ text: result.error, ok: false });
       } else {
         setBody("");
-        setMessage({ text: "Comentario enviado. Será publicado tras revisión.", ok: true });
+        setMessage({ text: "Comment submitted. It will appear after review.", ok: true });
         setTimeout(() => setMessage(null), 5000);
       }
     });
   }
 
   async function handleReport(commentId: string) {
-    const reason = prompt("¿Por qué reportas este comentario?");
+    const reason = prompt("Why are you reporting this comment?");
     if (!reason) return;
     const result = await reportComment(commentId, reason);
-    alert(result.error ?? "Comentario reportado. Lo revisaremos pronto.");
+    alert(result.error ?? "Comment reported. We will review it shortly.");
   }
 
   const date = (iso: string) =>
-    new Date(iso).toLocaleDateString("es-ES", { year: "numeric", month: "short", day: "numeric" });
+    new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
   return (
     <section className="mt-12 border-t border-border pt-10">
       <h2 className="mb-6 flex items-center gap-2 font-heading text-xl font-semibold text-foreground">
         <MessageCircle className="h-5 w-5 text-primary" />
-        Comentarios {comments.length > 0 && <span className="text-sm font-normal text-muted-foreground">({comments.length})</span>}
+        Comments {comments.length > 0 && <span className="text-sm font-normal text-muted-foreground">({comments.length})</span>}
       </h2>
 
       {/* Form */}
@@ -96,10 +96,10 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         <div className="mb-8 rounded-2xl border border-border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              Comentando como <span className="font-medium text-foreground">{user.user_metadata?.full_name ?? user.email}</span>
+              Commenting as <span className="font-medium text-foreground">{user.user_metadata?.full_name ?? user.email}</span>
             </span>
             <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
-              Cerrar sesión
+              Sign out
             </button>
           </div>
           <textarea
@@ -107,7 +107,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
             onChange={(e) => setBody(e.target.value)}
             maxLength={1000}
             rows={3}
-            placeholder="Escribe tu comentario... (máx. 1000 caracteres)"
+            placeholder="Write your comment… (max 1000 characters)"
             className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
           />
           <div className="mt-2 flex items-center justify-between">
@@ -118,7 +118,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
               <Send className="h-4 w-4" />
-              {isPending ? "Enviando..." : "Comentar"}
+              {isPending ? "Sending..." : "Post comment"}
             </button>
           </div>
           {message && (
@@ -129,25 +129,25 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         </div>
       ) : (
         <div className="mb-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-secondary/30 py-8 text-center">
-          <p className="text-sm text-muted-foreground">Inicia sesión para dejar un comentario</p>
+          <p className="text-sm text-muted-foreground">Sign in to leave a comment</p>
           <button
             onClick={handleLogin}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 cursor-pointer"
           >
             <LogIn className="h-4 w-4" />
-            Entrar con Google
+            Continue with Google
           </button>
         </div>
       )}
 
-      {/* Normas */}
+      {/* Guidelines */}
       <p className="mb-6 text-xs text-muted-foreground">
-        Al comentar aceptas nuestras normas: respeto, sin spam, sin lenguaje ofensivo ni contenido explícito.
+        By commenting you agree to our guidelines: be respectful, no spam, no offensive language or explicit content.
       </p>
 
-      {/* Lista de comentarios */}
+      {/* Comment list */}
       {comments.length === 0 ? (
-        <p className="py-8 text-center text-sm text-muted-foreground">Sé el primero en comentar.</p>
+        <p className="py-8 text-center text-sm text-muted-foreground">Be the first to comment.</p>
       ) : (
         <div className="space-y-4">
           {comments.map((c) => (
@@ -155,7 +155,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <CommentAvatar avatarUrl={c.profiles?.avatar_url} name={c.profiles?.display_name} />
-                  <span className="text-sm font-medium text-foreground">{c.profiles?.display_name ?? "Usuario"}</span>
+                  <span className="text-sm font-medium text-foreground">{c.profiles?.display_name ?? "User"}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-muted-foreground">{date(c.created_at)}</span>
@@ -164,7 +164,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
                       onClick={() => handleReport(c.id)}
                       className="hidden cursor-pointer items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-destructive group-hover:flex"
                     >
-                      <Flag className="h-3 w-3" /> Reportar
+                      <Flag className="h-3 w-3" /> Report
                     </button>
                   )}
                 </div>

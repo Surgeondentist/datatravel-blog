@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { useRef, useState } from "react";
 
 const categoryLabels: Record<string, string> = {
-  tecnologia: "Tecnología",
-  "inteligencia-artificial": "IA",
-  ciberseguridad: "Ciberseguridad",
-  guias: "Guías",
+  tecnologia: "Technology",
+  "inteligencia-artificial": "AI",
+  ciberseguridad: "Cybersecurity",
+  guias: "Guides",
 };
 
 const categoryColors: Record<string, string> = {
@@ -34,7 +34,7 @@ type Post = {
 export default function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
   const href = `/blog/${post.slug.current}`;
   const date = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("es-ES", { year: "numeric", month: "short", day: "numeric" })
+    ? new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
     : null;
 
   const cardRef = useRef<HTMLDivElement>(null);

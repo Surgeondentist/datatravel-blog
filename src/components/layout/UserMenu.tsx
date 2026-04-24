@@ -102,12 +102,12 @@ export default function UserMenu() {
         className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary transition-all hover:bg-primary/20 cursor-pointer"
       >
         <LogIn className="h-3.5 w-3.5" />
-        Entrar
+        Sign in
       </button>
     );
   }
 
-  const name = profile?.display_name ?? user.user_metadata?.full_name ?? user.email ?? "Usuario";
+  const name = profile?.display_name ?? user.user_metadata?.full_name ?? user.email ?? "User";
   const avatar = safeAvatarUrl(profile?.avatar_url ?? user.user_metadata?.avatar_url ?? null);
   const isAdmin = profile?.role === "admin";
   const initials = name.split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase();
@@ -117,7 +117,7 @@ export default function UserMenu() {
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 rounded-full border border-border/60 bg-background/80 p-1 pr-3 transition-all hover:border-primary/40 hover:bg-secondary cursor-pointer"
-        aria-label="Menú de usuario"
+        aria-label="User menu"
       >
         {/* Avatar */}
         <div className="relative h-7 w-7 overflow-hidden rounded-full ring-2 ring-primary/30">
@@ -164,7 +164,7 @@ export default function UserMenu() {
                 className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <Shield className="h-4 w-4 text-primary" />
-                <span>Panel de moderación</span>
+                <span>Moderation</span>
                 <span className="ml-auto rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">Admin</span>
               </Link>
             )}
@@ -177,7 +177,7 @@ export default function UserMenu() {
               className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
-              Cerrar sesión
+              Sign out
             </button>
           </div>
         </div>

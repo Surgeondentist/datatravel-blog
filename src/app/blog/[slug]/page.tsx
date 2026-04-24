@@ -28,10 +28,10 @@ type Post = {
 };
 
 const categoryLabels: Record<string, string> = {
-  tecnologia: "Tecnología",
-  "inteligencia-artificial": "Inteligencia artificial",
-  ciberseguridad: "Ciberseguridad",
-  guias: "Guías y herramientas",
+  tecnologia: "Technology",
+  "inteligencia-artificial": "Artificial intelligence",
+  ciberseguridad: "Cybersecurity",
+  guias: "Guides & tools",
 };
 
 const categoryColors: Record<string, string> = {
@@ -73,7 +73,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   if (!post) notFound();
 
   const date = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" })
+    ? new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : null;
 
   return (
@@ -85,7 +85,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <article className="mx-auto max-w-3xl px-4 py-10">
         <Link href="/blog" className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
-          <ArrowLeft className="h-4 w-4" /> Volver a artículos
+          <ArrowLeft className="h-4 w-4" /> Back to articles
         </Link>
 
         {post.category && (
@@ -110,7 +110,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           )}
           {post.readTime && (
             <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-primary/60" />{post.readTime} min de lectura
+              <Clock className="h-4 w-4 text-primary/60" />{post.readTime} min read
             </span>
           )}
         </div>
@@ -157,7 +157,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         ) : null}
       </article>
 
-      {/* Comentarios */}
+      {/* Comments */}
       <div className="mx-auto max-w-3xl px-4 pb-4">
         <CommentSection postSlug={slug} />
       </div>

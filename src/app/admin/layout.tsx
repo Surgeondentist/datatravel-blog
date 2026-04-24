@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <div className="flex items-center gap-3">
             <BrandLogo size="sm" />
             <div>
-              <h1 className="font-heading text-xl font-bold text-foreground">Panel de administración</h1>
+              <h1 className="font-heading text-xl font-bold text-foreground">Admin</h1>
               <p className="text-xs text-muted-foreground">Redshell</p>
             </div>
           </div>

@@ -36,23 +36,23 @@ function metadataBaseUrl(): URL {
 export const metadata: Metadata = {
   metadataBase: metadataBaseUrl(),
   title: {
-    default: "Redshell — Tecnología, IA y ciberseguridad",
+    default: "Redshell — Technology, AI & cybersecurity",
     template: "%s | Redshell",
   },
   description:
-    "Artículos sobre tecnología, inteligencia artificial y ciberseguridad. Análisis claros, buenas prácticas y herramientas para mantenerte al día.",
+    "Articles on technology, artificial intelligence, and cybersecurity. Clear analysis, solid practices, and tools to stay current.",
   keywords: [
-    "tecnología",
-    "inteligencia artificial",
-    "ciberseguridad",
-    "IA",
-    "privacidad",
-    "blog técnico",
+    "technology",
+    "artificial intelligence",
+    "cybersecurity",
+    "AI",
+    "privacy",
+    "tech blog",
     "redshell",
   ],
   openGraph: {
     siteName: "Redshell",
-    locale: "es_ES",
+    locale: "en_US",
     type: "website",
     images: [{ url: "/redshell-logo.png", alt: "Redshell — Turn on cybersecurity" }],
   },
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
-      lang="es"
+      lang="en"
       className={`${jetbrainsMono.variable} ${inter.variable} h-full`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {gaId ? (
           <>
-            {/* beforeInteractive: va en el HTML inicial para que Google (GSC / asistente de etiqueta) lo detecte sin ejecutar JS tardío */}
+            {/* beforeInteractive: in initial HTML so tag assistants detect it without late JS */}
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="beforeInteractive" />
             <Script id="google-analytics" strategy="beforeInteractive">
               {`

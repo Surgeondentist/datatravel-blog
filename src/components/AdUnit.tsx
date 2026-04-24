@@ -36,7 +36,7 @@ export default function AdUnit({
       (window.adsbygoogle = window.adsbygoogle || []).push({});
       pushed.current = true;
     } catch {
-      /* AdSense no disponible o bloqueado */
+      /* AdSense unavailable or blocked */
     }
   }, [clientId, resolvedSlot]);
 

@@ -12,25 +12,25 @@ export default function Footer() {
               <BrandLogo size="sm" />
             </Link>
             <p className="leading-relaxed">
-              Tecnología, inteligencia artificial y ciberseguridad explicadas con rigor y un lenguaje accesible.
+              Technology, artificial intelligence, and cybersecurity—explained with rigor and plain language.
             </p>
           </div>
 
           <div className="flex gap-16">
             <div>
-              <p className="mb-4 font-medium text-foreground">Temas</p>
+              <p className="mb-4 font-medium text-foreground">Topics</p>
               <ul className="space-y-2.5">
-                <li><Link href="/blog?category=tecnologia" className="transition-colors hover:text-primary">Tecnología</Link></li>
-                <li><Link href="/blog?category=inteligencia-artificial" className="transition-colors hover:text-primary">Inteligencia artificial</Link></li>
-                <li><Link href="/blog?category=ciberseguridad" className="transition-colors hover:text-primary">Ciberseguridad</Link></li>
-                <li><Link href="/blog?category=guias" className="transition-colors hover:text-primary">Guías y herramientas</Link></li>
+                <li><Link href="/blog?category=tecnologia" className="transition-colors hover:text-primary">Technology</Link></li>
+                <li><Link href="/blog?category=inteligencia-artificial" className="transition-colors hover:text-primary">Artificial intelligence</Link></li>
+                <li><Link href="/blog?category=ciberseguridad" className="transition-colors hover:text-primary">Cybersecurity</Link></li>
+                <li><Link href="/blog?category=guias" className="transition-colors hover:text-primary">Guides & tools</Link></li>
               </ul>
             </div>
             <div>
               <p className="mb-4 font-medium text-foreground">Legal</p>
               <ul className="space-y-2.5">
-                <li><Link href="/privacidad" className="transition-colors hover:text-primary">Privacidad</Link></li>
-                <li><Link href="/aviso-legal" className="transition-colors hover:text-primary">Aviso Legal</Link></li>
+                <li><Link href="/privacy" className="transition-colors hover:text-primary">Privacy</Link></li>
+                <li><Link href="/legal" className="transition-colors hover:text-primary">Legal notice</Link></li>
               </ul>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function Footer() {
 
         <Separator className="my-8" />
         <p className="text-center text-xs">
-          © {new Date().getFullYear()} Redshell — Contenido informativo; no sustituye asesoramiento profesional especializado.
+          © {new Date().getFullYear()} Redshell — Informational content; not a substitute for specialized professional advice.
         </p>
       </div>
     </footer>

@@ -23,52 +23,52 @@ function ptToText(blocks: unknown[]): string {
 }
 
 function buildPrompt(formato: Formato, title: string, excerpt: string, body: string): string {
-  const excerptLine = excerpt ? `Resumen: ${excerpt}\n` : "";
-  const content = `Título: ${title}\n${excerptLine}\n${body}`;
+  const excerptLine = excerpt ? `Summary: ${excerpt}\n` : "";
+  const content = `Title: ${title}\n${excerptLine}\n${body}`;
 
   if (formato === "twitter") {
-    return `Eres un experto en comunicación digital. Convierte este artículo de blog en un hilo de Twitter/X.
+    return `You are a digital communications expert. Turn this blog post into a Twitter/X thread.
 
-Reglas:
-- Entre 6 y 10 tuits
-- Cada tuit máximo 280 caracteres
-- Primer tuit: gancho que genere curiosidad
-- Último tuit: invita a leer el artículo completo en Redshell
-- Numeración: "1/" al inicio de cada tuit
-- 1-2 emojis por tuit, relevantes al contenido
-- Separa cada tuit con una línea en blanco
+Rules:
+- Between 6 and 10 tweets
+- Each tweet max 280 characters
+- First tweet: curiosity hook
+- Last tweet: invite readers to the full article on Redshell
+- Number each tweet with "1/" at the start
+- 1-2 relevant emojis per tweet
+- Separate tweets with a blank line
 
 ${content}`;
   }
 
   if (formato === "newsletter") {
-    return `Eres un experto en email marketing. Redacta un email de newsletter en español para promocionar este artículo del blog Redshell.
+    return `You are an email marketing expert. Write a newsletter email in English to promote this Redshell blog post.
 
-Formato:
-**Asunto:** (máx. 60 caracteres)
-**Preheader:** (máx. 100 caracteres)
+Format:
+**Subject:** (max 60 characters)
+**Preheader:** (max 100 characters)
 
-[Cuerpo del email: saludo, 3-4 párrafos conversacionales, llamada a la acción clara]
+[Email body: greeting, 3-4 conversational paragraphs, clear call to action]
 
-[Firma: El equipo de Redshell]
+[Sign-off: The Redshell team]
 
 ${content}`;
   }
 
   // reels
-  return `Eres un experto en contenido para redes sociales. Crea un guion para un Reel de Instagram o YouTube Short en español.
+  return `You are a social content expert. Create a script for an Instagram Reel or YouTube Short in English.
 
-Formato:
-**Duración:** 60-90 segundos
+Format:
+**Length:** 60-90 seconds
 
-**HOOK (0-3s):** [frase que detiene el scroll]
-**PUNTO 1 (4-20s):** [primer concepto clave]
-**PUNTO 2 (21-40s):** [segundo concepto clave]
-**PUNTO 3 (41-55s):** [tercer concepto o conclusión práctica]
-**CTA (56-90s):** [llamada a la acción]
+**HOOK (0-3s):** [scroll-stopping line]
+**BEAT 1 (4-20s):** [first key idea]
+**BEAT 2 (21-40s):** [second key idea]
+**BEAT 3 (41-55s):** [third idea or practical takeaway]
+**CTA (56-90s):** [call to action]
 
-**Descripción del video:**
-[2-3 líneas + 6-8 hashtags en español]
+**Video description:**
+[2-3 lines + 6-8 hashtags in English]
 
 ${content}`;
 }
@@ -76,25 +76,25 @@ ${content}`;
 export async function generarContenido(
   slug: string,
   formato: Formato
-): Promise<{ contenido: string } | { error: string }> {
+): Promise<{ content: string } | { error: string }> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "No autenticado" };
+  if (!user) return { error: "Not signed in" };
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .maybeSingle();
-  if (profile?.role !== "admin") return { error: "No autorizado" };
+  if (profile?.role !== "admin") return { error: "Unauthorized" };
 
   const post = await sanityClient.fetch(postBySlugQuery, { slug });
-  if (!post) return { error: "Artículo no encontrado" };
+  if (!post) return { error: "Post not found" };
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return { error: "ANTHROPIC_API_KEY no configurada en el servidor" };
+  if (!apiKey) return { error: "ANTHROPIC_API_KEY is not set on the server" };
 
   const body = ptToText(post.body ?? []);
   const prompt = buildPrompt(formato, post.title ?? "", post.excerpt ?? "", body);
@@ -111,5 +111,5 @@ export async function generarContenido(
     message.content.find((b): b is Anthropic.TextBlock => b.type === "text")
       ?.text ?? "";
 
-  return { contenido: text };
+  return { content: text };
 }
