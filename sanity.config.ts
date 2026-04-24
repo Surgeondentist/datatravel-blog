@@ -18,7 +18,14 @@ export default defineConfig({
   title: "Blogtech — CMS",
   projectId,
   dataset,
-  plugins: [structureTool({ structure }), visionTool()],
+  plugins: [
+    structureTool({
+      name: "cms",
+      title: "CMS",
+      structure,
+    }),
+    visionTool(),
+  ],
   schema: { types: schemaTypes },
   basePath: "/studio",
 });
