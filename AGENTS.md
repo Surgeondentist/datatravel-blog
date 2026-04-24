@@ -6,4 +6,4 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Reglas del proyecto (Cursor)
 
-Convenciones adicionales viven en `.cursor/rules/*.mdc`: contexto de **Blogtech** (tecnología, IA, ciberseguridad), Next App Router, Sanity y UI. Cursor las aplica según `alwaysApply` y los `globs` de cada archivo.
+Convenciones adicionales viven en `.cursor/rules/*.mdc`: contexto de **Redshell** (tecnología, IA, ciberseguridad), Next App Router, Sanity y UI. Cursor las aplica según `alwaysApply` y los `globs` de cada archivo.

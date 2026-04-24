@@ -36,8 +36,8 @@ function metadataBaseUrl(): URL {
 export const metadata: Metadata = {
   metadataBase: metadataBaseUrl(),
   title: {
-    default: "Blogtech — Tecnología, IA y ciberseguridad",
-    template: "%s | Blogtech",
+    default: "Redshell — Tecnología, IA y ciberseguridad",
+    template: "%s | Redshell",
   },
   description:
     "Artículos sobre tecnología, inteligencia artificial y ciberseguridad. Análisis claros, buenas prácticas y herramientas para mantenerte al día.",
@@ -48,11 +48,21 @@ export const metadata: Metadata = {
     "IA",
     "privacidad",
     "blog técnico",
+    "redshell",
   ],
   openGraph: {
-    siteName: "Blogtech",
+    siteName: "Redshell",
     locale: "es_ES",
     type: "website",
+    images: [{ url: "/redshell-logo.png", alt: "Redshell — Turn on cybersecurity" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/redshell-logo.png"],
+  },
+  icons: {
+    icon: [{ url: "/redshell-logo.png", type: "image/png" }],
+    apple: "/redshell-logo.png",
   },
   ...(adsenseClient
     ? { other: { "google-adsense-account": adsenseClient } as Record<string, string> }

@@ -14,8 +14,8 @@ if (!projectId) {
 }
 
 export default defineConfig({
-  name: "blogtech",
-  title: "Blogtech — CMS",
+  name: "redshell",
+  title: "Redshell — CMS",
   projectId,
   dataset,
   plugins: [

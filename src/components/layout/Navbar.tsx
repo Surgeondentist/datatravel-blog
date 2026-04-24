@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Cpu, Moon, Sun } from "lucide-react";
+import { Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserMenu from "@/components/layout/UserMenu";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 const navLinks = [
   { href: "/blog", label: "Artículos" },
@@ -34,13 +35,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Cpu className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <span className="font-heading font-semibold tracking-tight text-foreground">
-            Blog<span className="text-primary">tech</span>
-          </span>
+        <Link href="/" className="flex items-center gap-2 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+          <BrandLogo size="md" priority />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -63,6 +59,9 @@ export default function Navbar() {
               {open ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
             </SheetTrigger>
             <SheetContent side="right" className="w-72 pt-12 bg-background">
+              <div className="mb-6 px-2">
+                <BrandLogo size="sm" />
+              </div>
               <nav className="flex flex-col gap-1">
                 {navLinks.map((l) => (
                   <Link

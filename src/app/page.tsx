@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, Cpu, Shield, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import BrandLogo from "@/components/brand/BrandLogo";
 import PostCard from "@/components/blog/PostCard";
 import AdUnit from "@/components/AdUnit";
 import NewsletterForm from "@/components/NewsletterForm";
@@ -58,10 +58,12 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
         <div className="relative mx-auto max-w-6xl px-4 py-32 text-center">
-          <Badge className="mb-6 border border-cyan-400/30 bg-cyan-500/15 text-cyan-100 hover:bg-cyan-500/15 backdrop-blur-sm">
-            <Sparkles className="mr-1.5 h-3 w-3" />
-            Blogtech
-          </Badge>
+          <div className="mb-8 flex justify-center">
+            <BrandLogo
+              size="lg"
+              className="drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
+            />
+          </div>
 
           <h1 className="mb-6 font-heading text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">
             Tecnología, IA y{" "}

@@ -1,5 +1,5 @@
 -- =============================================================================
--- Blogtech / datatravel — Supabase: tablas, RLS, Storage (ejecutar una vez)
+-- Redshell — Supabase: tablas, RLS, Storage (ejecutar una vez)
 -- Dashboard → SQL Editor → New query → Pegar → Run
 -- =============================================================================
 

@@ -1,8 +1,8 @@
 /**
  * URL canónica del sitio (sin barra final).
  *
- * Configura en `.env.local` / variables de Vercel:
- * `NEXT_PUBLIC_SITE_URL=https://www.tudominio.com`
+ * Configura en `.env.local` / variables de Vercel (producción en apex):
+ * `NEXT_PUBLIC_SITE_URL=https://redshell.cloud`
  *
  * Si no está definida, en Vercel se usa `VERCEL_URL`. Último recurso: el despliegue por defecto.
  */

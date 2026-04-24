@@ -7,5 +7,5 @@ export default defineCliConfig({
   api: projectId
     ? { projectId, dataset }
     : { projectId: "missing-env", dataset: "production" },
-  studioHost: "blogtech",
+  studioHost: "redshell",
 });

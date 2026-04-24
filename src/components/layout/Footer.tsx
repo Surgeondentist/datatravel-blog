@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Cpu } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 export default function Footer() {
   return (
@@ -8,13 +8,8 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div className="max-w-xs">
-            <Link href="/" className="mb-4 flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Cpu className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="font-heading font-semibold text-foreground">
-                Blog<span className="text-primary">tech</span>
-              </span>
+            <Link href="/" className="mb-4 inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+              <BrandLogo size="sm" />
             </Link>
             <p className="leading-relaxed">
               Tecnología, inteligencia artificial y ciberseguridad explicadas con rigor y un lenguaje accesible.
@@ -43,7 +38,7 @@ export default function Footer() {
 
         <Separator className="my-8" />
         <p className="text-center text-xs">
-          © {new Date().getFullYear()} Blogtech — Contenido informativo; no sustituye asesoramiento profesional especializado.
+          © {new Date().getFullYear()} Redshell — Contenido informativo; no sustituye asesoramiento profesional especializado.
         </p>
       </div>
     </footer>
