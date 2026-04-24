@@ -49,15 +49,19 @@ export default function UserMenu() {
         (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
         (typeof user.user_metadata?.name === "string" && user.user_metadata.name) ||
         (user.email ? user.email.split("@")[0] : null);
-      const { error: insertErr } = await supabase.from("profiles").insert({
-        id: user.id,
-        email: user.email ?? "",
-        display_name: displayName,
-        avatar_url:
-          typeof user.user_metadata?.avatar_url === "string" ? user.user_metadata.avatar_url : null,
-        role: "user",
-      });
-      if (!insertErr) {
+      // Trigger + cliente pueden insertar a la vez → 23505; ignoreDuplicates evita error.
+      const { error: upsertErr } = await supabase.from("profiles").upsert(
+        {
+          id: user.id,
+          email: user.email ?? "",
+          display_name: displayName,
+          avatar_url:
+            typeof user.user_metadata?.avatar_url === "string" ? user.user_metadata.avatar_url : null,
+          role: "user",
+        },
+        { onConflict: "id", ignoreDuplicates: true }
+      );
+      if (!upsertErr) {
         const again = await supabase
           .from("profiles")
           .select("display_name, avatar_url, role")

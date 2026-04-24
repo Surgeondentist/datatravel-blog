@@ -2,6 +2,7 @@
 -- Para instalaciones nuevas, usa el script completo:
 --   supabase/sql/redshell_full_setup.sql
 -- (incluye subscribers + RLS + el resto del esquema).
+-- Si usas solo este archivo, ejecuta antes public.is_profile_admin() (ver profiles_rls_fix_recursion.sql).
 
 ALTER TABLE public.subscribers ENABLE ROW LEVEL SECURITY;
 
@@ -16,16 +17,9 @@ CREATE POLICY "Newsletter: insert público"
   TO anon, authenticated
   WITH CHECK (true);
 
--- Solo cuentas con role = admin en profiles ven la lista
+-- Solo admins (usa is_profile_admin() del maestro; evita recursión RLS en profiles).
 CREATE POLICY "Newsletter: lectura solo admins"
   ON public.subscribers
   FOR SELECT
   TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1
-      FROM public.profiles p
-      WHERE p.id = auth.uid()
-        AND p.role = 'admin'
-    )
-  );
+  USING (public.is_profile_admin());
