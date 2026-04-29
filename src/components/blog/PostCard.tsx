@@ -5,13 +5,8 @@ import Image from "next/image";
 import { Clock, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useRef, useState } from "react";
-
-const categoryLabels: Record<string, string> = {
-  tecnologia: "Technology",
-  "inteligencia-artificial": "AI",
-  ciberseguridad: "Cybersecurity",
-  guias: "Guides",
-};
+import { useLocaleContext } from "@/components/locale/LocaleProvider";
+import { categoryLabel } from "@/messages/ui";
 
 const categoryColors: Record<string, string> = {
   tecnologia: "bg-cyan-500/20 text-cyan-100 border-cyan-400/25",
@@ -32,10 +27,13 @@ type Post = {
 };
 
 export default function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
+  const { locale } = useLocaleContext();
   const href = `/blog/${post.slug.current}`;
+  const dateLocale = locale === "es" ? "es-ES" : "en-US";
   const date = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+    ? new Date(post.publishedAt).toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "numeric" })
     : null;
+  const catShort = post.category ? categoryLabel(locale, post.category, "short") : "";
 
   const cardRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState("perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)");
@@ -105,7 +103,7 @@ export default function PostCard({ post, featured }: { post: Post; featured?: bo
           {post.category && (
             <div className="absolute left-3 top-3">
               <Badge className={`border text-xs font-medium backdrop-blur-sm ${categoryColors[post.category] ?? "bg-white/10 text-white/70 border-white/10"}`}>
-                {categoryLabels[post.category] ?? post.category}
+                {catShort || post.category}
               </Badge>
             </div>
           )}

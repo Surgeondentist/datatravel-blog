@@ -39,6 +39,9 @@ export async function submitComment(postSlug: string, body: string) {
 }
 
 export async function reportComment(commentId: string, reason: string) {
+  if (!reason || reason.trim().length < 3) return { error: "Report reason is too short (min 3 characters)." };
+  if (reason.trim().length > 500) return { error: "Report reason is too long (max 500 characters)." };
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "You must be signed in." };

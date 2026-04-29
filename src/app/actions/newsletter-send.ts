@@ -14,6 +14,7 @@ export async function enviarNewsletter(
   if (!subjectTrim) return { error: "Subject is required" };
   if (!htmlTrim) return { error: "Email body is required" };
   if (subjectTrim.length > 200) return { error: "Subject is too long (max 200 characters)" };
+  if (htmlTrim.length > 100_000) return { error: "Email body is too large (max 100 000 characters)" };
 
   const supabase = await createClient();
   const {

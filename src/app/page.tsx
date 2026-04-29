@@ -7,25 +7,23 @@ import NewsletterForm from "@/components/NewsletterForm";
 import { client } from "@/sanity/lib/client";
 import { latestPostsQuery } from "@/sanity/lib/queries";
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/get-locale";
+import { uiMessages } from "@/messages/ui";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
-
-const categories = [
-  { slug: "tecnologia", label: "Technology", icon: "✦" },
-  { slug: "inteligencia-artificial", label: "Artificial intelligence", icon: "✦" },
-  { slug: "ciberseguridad", label: "Cybersecurity", icon: "✦" },
-  { slug: "guias", label: "Guides & tools", icon: "✦" },
-];
-
-const pillars = [
-  { icon: BookOpen, title: "Depth & context", desc: "What each technical shift means and how it affects you in practice." },
-  { icon: Cpu, title: "AI & product", desc: "Models, tools, and habits for using AI with judgment." },
-  { icon: Shield, title: "Security first", desc: "Threats, defense in depth, and habits that reduce real risk." },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  if (locale !== "es") {
+    return { alternates: { canonical: "/" } };
+  }
+  return {
+    alternates: { canonical: "/" },
+    title: "Inicio — Redshell",
+    description:
+      "Artículos sobre tecnología, inteligencia artificial y ciberseguridad. Análisis claro y herramientas para estar al día.",
+  };
+}
 
 type Post = {
   _id: string;
@@ -39,12 +37,28 @@ type Post = {
 };
 
 export default async function HomePage() {
+  const locale = await getLocale();
+  const t = uiMessages[locale];
+
   let posts: Post[] = [];
   try {
     posts = await client.fetch(latestPostsQuery);
   } catch {
     posts = [];
   }
+
+  const pillars = [
+    { icon: BookOpen, title: t.home.pillar1Title, desc: t.home.pillar1Desc },
+    { icon: Cpu, title: t.home.pillar2Title, desc: t.home.pillar2Desc },
+    { icon: Shield, title: t.home.pillar3Title, desc: t.home.pillar3Desc },
+  ];
+
+  const categories = [
+    { slug: "tecnologia", label: t.home.catTechnology },
+    { slug: "inteligencia-artificial", label: t.home.catAi },
+    { slug: "ciberseguridad", label: t.home.catCyber },
+    { slug: "guias", label: t.home.catGuides },
+  ];
 
   return (
     <main>
@@ -66,34 +80,31 @@ export default async function HomePage() {
           </div>
 
           <h1 className="mb-6 font-heading text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-7xl">
-            Technology, AI &{" "}
+            {t.home.heroTitleBefore}{" "}
             <span className="bg-gradient-to-r from-cyan-300 to-sky-200 bg-clip-text text-transparent">
-              cybersecurity
+              {t.home.heroHighlight}
             </span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300/90 md:text-xl">
-            Articles and guides to understand the software around us, adopt artificial intelligence with judgment, and
-            harden your security posture—without hype or sensationalism.
-          </p>
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300/90 md:text-xl">{t.home.heroSubtitle}</p>
 
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/blog"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-cyan-50"
             >
-              Browse articles <ArrowRight className="h-4 w-4" />
+              {t.home.browseArticles} <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="#topics"
               className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10 hover:text-white"
             >
-              Browse topics
+              {t.home.browseTopics}
             </Link>
           </div>
 
           <div className="mt-20 flex flex-col items-center gap-2 text-cyan-200/40">
-            <span className="text-xs tracking-widest uppercase">Scroll</span>
+            <span className="text-xs tracking-widest uppercase">{t.home.scroll}</span>
             <div className="h-8 w-px bg-gradient-to-b from-cyan-300/50 to-transparent" />
           </div>
         </div>
@@ -122,8 +133,8 @@ export default async function HomePage() {
       <section id="topics" className="py-20 bg-secondary/40">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-12 text-center">
-            <h2 className="font-heading text-3xl font-bold text-foreground">Explore by topic</h2>
-            <p className="mt-3 text-muted-foreground">Find content aligned with what you want to learn or ship</p>
+            <h2 className="font-heading text-3xl font-bold text-foreground">{t.home.exploreTopics}</h2>
+            <p className="mt-3 text-muted-foreground">{t.home.exploreSubtitle}</p>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {categories.map((cat) => (
@@ -156,11 +167,11 @@ export default async function HomePage() {
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="mb-12 flex items-end justify-between">
               <div>
-                <h2 className="font-heading text-3xl font-bold text-foreground">Latest articles</h2>
-                <p className="mt-2 text-muted-foreground">Fresh takes on technology, AI, and security</p>
+                <h2 className="font-heading text-3xl font-bold text-foreground">{t.home.latestTitle}</h2>
+                <p className="mt-2 text-muted-foreground">{t.home.latestSubtitle}</p>
               </div>
               <Link href="/blog" className="hidden items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors sm:flex">
-                View all <ArrowRight className="h-4 w-4" />
+                {t.home.viewAll} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -170,7 +181,7 @@ export default async function HomePage() {
             </div>
             <div className="mt-8 flex justify-center sm:hidden">
               <Link href="/blog" className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors">
-                View all articles <ArrowRight className="h-4 w-4" />
+                {t.home.viewAllArticles} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -182,8 +193,8 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,rgba(34,211,238,0.22),transparent)]" />
         <div className="relative mx-auto max-w-xl px-4 text-center">
           <Sparkles aria-hidden="true" className="mx-auto mb-4 h-8 w-8 text-cyan-300/60" />
-          <h2 className="mb-3 font-heading text-3xl font-bold text-white">Newsletter</h2>
-          <p className="mb-8 text-slate-300/80">New articles, resources, and curated links. No fluff.</p>
+          <h2 className="mb-3 font-heading text-3xl font-bold text-white">{t.home.newsletterTitle}</h2>
+          <p className="mb-8 text-slate-300/80">{t.home.newsletterSubtitle}</p>
           <NewsletterForm variant="hero" />
         </div>
       </section>

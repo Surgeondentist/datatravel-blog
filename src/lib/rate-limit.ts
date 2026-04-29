@@ -58,10 +58,10 @@ async function runLimit(
   }
 
   if (process.env.NODE_ENV === "production") {
-    console.warn(
-      "[rate-limit] Configura UPSTASH_REDIS_REST_URL y UPSTASH_REDIS_REST_TOKEN en Vercel para activar límites."
+    console.error(
+      "[rate-limit] UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN no configurados. Denegando petición por seguridad."
     );
-    return true;
+    return false;
   }
 
   return memoryFixedWindow(`${options.prefix}:${identifier}`, options.max, options.windowMs);

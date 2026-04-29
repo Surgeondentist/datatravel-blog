@@ -6,6 +6,7 @@ import { LogIn, LogOut, Shield, ChevronDown } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { safeAvatarUrl } from "@/lib/safe-avatar-url";
+import { useLocaleContext } from "@/components/locale/LocaleProvider";
 
 type Profile = {
   display_name: string | null;
@@ -14,6 +15,8 @@ type Profile = {
 };
 
 export default function UserMenu() {
+  const { messages } = useLocaleContext();
+  const um = messages.userMenu;
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -102,7 +105,7 @@ export default function UserMenu() {
         className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary transition-all hover:bg-primary/20 cursor-pointer"
       >
         <LogIn className="h-3.5 w-3.5" />
-        Sign in
+        {um.signIn}
       </button>
     );
   }
@@ -117,7 +120,7 @@ export default function UserMenu() {
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 rounded-full border border-border/60 bg-background/80 p-1 pr-3 transition-all hover:border-primary/40 hover:bg-secondary cursor-pointer"
-        aria-label="User menu"
+        aria-label={um.userMenuAria}
       >
         {/* Avatar */}
         <div className="relative h-7 w-7 overflow-hidden rounded-full ring-2 ring-primary/30">
@@ -164,8 +167,8 @@ export default function UserMenu() {
                 className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <Shield className="h-4 w-4 text-primary" />
-                <span>Moderation</span>
-                <span className="ml-auto rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">Admin</span>
+                <span>{um.moderation}</span>
+                <span className="ml-auto rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">{um.adminBadge}</span>
               </Link>
             )}
           </div>
@@ -177,7 +180,7 @@ export default function UserMenu() {
               className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
-              Sign out
+              {um.signOut}
             </button>
           </div>
         </div>

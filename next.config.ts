@@ -38,6 +38,8 @@ function buildCsp(): string {
 
   return [
     "default-src 'self'",
+    // 'unsafe-inline' es requerido por GTM y AdSense; aceptado mientras dependan de scripts inline.
+    // Migrar a nonces si se elimina dependencia de Google Ads/Analytics.
     "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://partner.googleadservices.com https://www.google-analytics.com https://googleads.g.doubleclick.net",
     "style-src 'self' 'unsafe-inline'",
     `img-src ${imgSrc}`,

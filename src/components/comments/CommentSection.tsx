@@ -6,6 +6,7 @@ import { submitComment, reportComment } from "@/app/actions/comments";
 import { Flag, LogIn, Send, MessageCircle } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { safeAvatarUrl } from "@/lib/safe-avatar-url";
+import { useLocaleContext } from "@/components/locale/LocaleProvider";
 
 type Comment = {
   id: string;
@@ -27,6 +28,9 @@ function CommentAvatar({ avatarUrl, name }: { avatarUrl: string | null | undefin
 }
 
 export default function CommentSection({ postSlug }: { postSlug: string }) {
+  const { locale, messages } = useLocaleContext();
+  const cm = messages.comments;
+  const pr = messages.post;
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -68,27 +72,28 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         setMessage({ text: result.error, ok: false });
       } else {
         setBody("");
-        setMessage({ text: "Comment submitted. It will appear after review.", ok: true });
+        setMessage({ text: cm.submitted, ok: true });
         setTimeout(() => setMessage(null), 5000);
       }
     });
   }
 
   async function handleReport(commentId: string) {
-    const reason = prompt("Why are you reporting this comment?");
+    const reason = prompt(pr.reportPrompt);
     if (!reason) return;
     const result = await reportComment(commentId, reason);
-    alert(result.error ?? "Comment reported. We will review it shortly.");
+    alert(result.error ?? pr.reportOk);
   }
 
+  const dateLocale = locale === "es" ? "es-ES" : "en-US";
   const date = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    new Date(iso).toLocaleDateString(dateLocale, { year: "numeric", month: "short", day: "numeric" });
 
   return (
     <section className="mt-12 border-t border-border pt-10">
       <h2 className="mb-6 flex items-center gap-2 font-heading text-xl font-semibold text-foreground">
         <MessageCircle className="h-5 w-5 text-primary" />
-        Comments {comments.length > 0 && <span className="text-sm font-normal text-muted-foreground">({comments.length})</span>}
+        {cm.title} {comments.length > 0 && <span className="text-sm font-normal text-muted-foreground">({comments.length})</span>}
       </h2>
 
       {/* Form */}
@@ -96,10 +101,11 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         <div className="mb-8 rounded-2xl border border-border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              Commenting as <span className="font-medium text-foreground">{user.user_metadata?.full_name ?? user.email}</span>
+              {cm.commentingAs}{" "}
+              <span className="font-medium text-foreground">{user.user_metadata?.full_name ?? user.email}</span>
             </span>
             <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
-              Sign out
+              {cm.signOut}
             </button>
           </div>
           <textarea
@@ -107,7 +113,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
             onChange={(e) => setBody(e.target.value)}
             maxLength={1000}
             rows={3}
-            placeholder="Write your comment… (max 1000 characters)"
+            placeholder={cm.placeholder}
             className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary"
           />
           <div className="mt-2 flex items-center justify-between">
@@ -118,7 +124,7 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
               <Send className="h-4 w-4" />
-              {isPending ? "Sending..." : "Post comment"}
+              {isPending ? cm.sending : cm.postComment}
             </button>
           </div>
           {message && (
@@ -129,47 +135,45 @@ export default function CommentSection({ postSlug }: { postSlug: string }) {
         </div>
       ) : (
         <div className="mb-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-secondary/30 py-8 text-center">
-          <p className="text-sm text-muted-foreground">Sign in to leave a comment</p>
+          <p className="text-sm text-muted-foreground">{cm.signInPrompt}</p>
           <button
             onClick={handleLogin}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 cursor-pointer"
           >
             <LogIn className="h-4 w-4" />
-            Continue with Google
+            {cm.continueGoogle}
           </button>
         </div>
       )}
 
       {/* Guidelines */}
-      <p className="mb-6 text-xs text-muted-foreground">
-        By commenting you agree to our guidelines: be respectful, no spam, no offensive language or explicit content.
-      </p>
+      <p className="mb-6 text-xs text-muted-foreground">{cm.guidelines}</p>
 
       {/* Comment list */}
       {comments.length === 0 ? (
-        <p className="py-8 text-center text-sm text-muted-foreground">Be the first to comment.</p>
+        <p className="py-8 text-center text-sm text-muted-foreground">{cm.firstComment}</p>
       ) : (
         <div className="space-y-4">
-          {comments.map((c) => (
-            <div key={c.id} className="group rounded-2xl border border-border bg-card p-5">
+          {comments.map((row) => (
+            <div key={row.id} className="group rounded-2xl border border-border bg-card p-5">
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CommentAvatar avatarUrl={c.profiles?.avatar_url} name={c.profiles?.display_name} />
-                  <span className="text-sm font-medium text-foreground">{c.profiles?.display_name ?? "User"}</span>
+                  <CommentAvatar avatarUrl={row.profiles?.avatar_url} name={row.profiles?.display_name} />
+                  <span className="text-sm font-medium text-foreground">{row.profiles?.display_name ?? cm.userFallback}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground">{date(c.created_at)}</span>
+                  <span className="text-xs text-muted-foreground">{date(row.created_at)}</span>
                   {user && (
                     <button
-                      onClick={() => handleReport(c.id)}
+                      onClick={() => handleReport(row.id)}
                       className="hidden cursor-pointer items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-destructive group-hover:flex"
                     >
-                      <Flag className="h-3 w-3" /> Report
+                      <Flag className="h-3 w-3" /> {cm.report}
                     </button>
                   )}
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-foreground">{c.body}</p>
+              <p className="text-sm leading-relaxed text-foreground">{row.body}</p>
             </div>
           ))}
         </div>

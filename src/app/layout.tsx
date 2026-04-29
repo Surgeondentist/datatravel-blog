@@ -5,6 +5,8 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LocaleProvider } from "@/components/locale/LocaleProvider";
+import { getLocale } from "@/lib/get-locale";
 import { getSiteUrl } from "@/lib/site";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -33,49 +35,57 @@ function metadataBaseUrl(): URL {
   }
 }
 
-export const metadata: Metadata = {
-  metadataBase: metadataBaseUrl(),
-  title: {
-    default: "Redshell — Technology, AI & cybersecurity",
-    template: "%s | Redshell",
-  },
-  description:
-    "Articles on technology, artificial intelligence, and cybersecurity. Clear analysis, solid practices, and tools to stay current.",
-  keywords: [
-    "technology",
-    "artificial intelligence",
-    "cybersecurity",
-    "AI",
-    "privacy",
-    "tech blog",
-    "redshell",
-  ],
-  openGraph: {
-    siteName: "Redshell",
-    locale: "en_US",
-    type: "website",
-    images: [{ url: "/redshell-logo.png", alt: "Redshell — Turn on cybersecurity" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/redshell-logo.png"],
-  },
-  icons: {
-    icon: [{ url: "/redshell-logo.png", type: "image/png" }],
-    apple: "/redshell-logo.png",
-  },
-  ...(adsenseClient
-    ? { other: { "google-adsense-account": adsenseClient } as Record<string, string> }
-    : {}),
-  ...(googleSiteVerification
-    ? { verification: { google: googleSiteVerification } }
-    : {}),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const ogLocale = locale === "es" ? "es_ES" : "en_US";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return {
+    metadataBase: metadataBaseUrl(),
+    title: {
+      default: "Redshell — Technology, AI & cybersecurity",
+      template: "%s | Redshell",
+    },
+    description:
+      "Articles on technology, artificial intelligence, and cybersecurity. Clear analysis, solid practices, and tools to stay current.",
+    keywords: [
+      "technology",
+      "artificial intelligence",
+      "cybersecurity",
+      "AI",
+      "privacy",
+      "tech blog",
+      "redshell",
+    ],
+    openGraph: {
+      siteName: "Redshell",
+      locale: ogLocale,
+      type: "website",
+      images: [{ url: "/redshell-logo.png", alt: "Redshell — Turn on cybersecurity" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/redshell-logo.png"],
+    },
+    icons: {
+      icon: [{ url: "/redshell-logo.png", type: "image/png" }],
+      apple: "/redshell-logo.png",
+    },
+    ...(adsenseClient
+      ? { other: { "google-adsense-account": adsenseClient } as Record<string, string> }
+      : {}),
+    ...(googleSiteVerification
+      ? { verification: { google: googleSiteVerification } }
+      : {}),
+  };
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
+  const htmlLang = locale === "es" ? "es" : "en";
+
   return (
     <html
-      lang="en"
+      lang={htmlLang}
       className={`${jetbrainsMono.variable} ${inter.variable} h-full`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
@@ -105,11 +115,13 @@ gtag('config', '${gaId}');
         ) : null}
       </head>
       <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
-        <ThemeProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <Footer />
-        </ThemeProvider>
+        <LocaleProvider initialLocale={locale}>
+          <ThemeProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </ThemeProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

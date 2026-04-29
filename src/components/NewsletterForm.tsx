@@ -4,10 +4,13 @@ import { useId, useState, useTransition } from "react";
 import { subscribeNewsletter } from "@/app/actions/newsletter";
 import { Send, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLocaleContext } from "@/components/locale/LocaleProvider";
 
 type Variant = "hero" | "card";
 
 export default function NewsletterForm({ variant = "hero" }: { variant?: Variant }) {
+  const { messages: t } = useLocaleContext();
+  const nf = t.newsletterForm;
   const emailFieldId = useId();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -23,7 +26,7 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
         setEmail("");
       } else {
         setStatus("error");
-        setMessage(result.error ?? "Unknown error.");
+        setMessage(result.error ?? nf.unknownError);
       }
     });
   }
@@ -35,10 +38,8 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/15">
             <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
           </div>
-          <p className="font-heading text-base font-semibold text-foreground">You&apos;re subscribed</p>
-          <p className="text-center text-sm text-muted-foreground px-4">
-            We&apos;ll let you know when we publish new content.
-          </p>
+          <p className="font-heading text-base font-semibold text-foreground">{nf.subscribedTitle}</p>
+          <p className="text-center text-sm text-muted-foreground px-4">{nf.subscribedBody}</p>
         </div>
       );
     }
@@ -47,8 +48,8 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
           <CheckCircle2 className="h-7 w-7 text-white" />
         </div>
-        <p className="font-heading text-lg font-semibold text-white">You&apos;re subscribed</p>
-        <p className="text-sm text-violet-200/70">We&apos;ll let you know when we publish new content.</p>
+        <p className="font-heading text-lg font-semibold text-white">{nf.subscribedTitle}</p>
+        <p className="text-sm text-violet-200/70">{nf.subscribedBody}</p>
       </div>
     );
   }
@@ -68,7 +69,7 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
   return (
     <form onSubmit={handleSubmit} className={cn("flex flex-col gap-3 sm:flex-row", variant === "card" && "sm:items-start")}>
       <label htmlFor={emailFieldId} className="sr-only">
-        Email address
+        {nf.emailLabel}
       </label>
       <input
         id={emailFieldId}
@@ -79,7 +80,7 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
           setEmail(e.target.value);
           setStatus("idle");
         }}
-        placeholder="you@example.com"
+        placeholder={nf.placeholder}
         required
         disabled={isPending}
         className={inputClass}
@@ -90,7 +91,7 @@ export default function NewsletterForm({ variant = "hero" }: { variant?: Variant
         ) : (
           <Send className="h-4 w-4" />
         )}
-        {isPending ? "Sending..." : "Subscribe"}
+        {isPending ? nf.sending : nf.subscribe}
       </button>
       {status === "error" && (
         <p className={cn("w-full text-center text-sm sm:col-span-2", errorClass)}>{message}</p>

@@ -59,6 +59,7 @@ export default function NewsletterBroadcastForm() {
             value={html}
             onChange={(e) => setHtml(e.target.value)}
             rows={14}
+            maxLength={100000}
             placeholder={'<p>Hello — here is our latest update.</p>\n<p><a href="https://redshell.cloud/blog">Read the blog</a></p>'}
             className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/40"
           />

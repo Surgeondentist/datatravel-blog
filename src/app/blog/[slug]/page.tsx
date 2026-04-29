@@ -11,6 +11,8 @@ import AdUnit from "@/components/AdUnit";
 import CommentSection from "@/components/comments/CommentSection";
 import NewsletterSection from "@/components/NewsletterSection";
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/get-locale";
+import { categoryLabel, uiMessages } from "@/messages/ui";
 
 export const revalidate = 3600;
 
@@ -26,13 +28,6 @@ type Post = {
   body?: unknown[];
   seoTitle?: string;
   seoDescription?: string;
-};
-
-const categoryLabels: Record<string, string> = {
-  tecnologia: "Technology",
-  "inteligencia-artificial": "Artificial intelligence",
-  ciberseguridad: "Cybersecurity",
-  guias: "Guides & tools",
 };
 
 const categoryColors: Record<string, string> = {
@@ -64,6 +59,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const locale = await getLocale();
+  const t = uiMessages[locale];
   const { slug } = await params;
   let post: Post | null = null;
   try {
@@ -73,9 +70,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   }
   if (!post) notFound();
 
+  const dateLocale = locale === "es" ? "es-ES" : "en-US";
   const date = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+    ? new Date(post.publishedAt).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" })
     : null;
+
+  const catLong = post.category ? categoryLabel(locale, post.category, "long") : "";
 
   return (
     <main>
@@ -86,12 +86,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <article className="mx-auto max-w-3xl px-4 py-10">
         <Link href="/blog" className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
-          <ArrowLeft className="h-4 w-4" /> Back to articles
+          <ArrowLeft className="h-4 w-4" /> {t.post.back}
         </Link>
 
         {post.category && (
           <Badge className={`mb-5 border-0 ${categoryColors[post.category] ?? "bg-secondary text-secondary-foreground"}`}>
-            {categoryLabels[post.category] ?? post.category}
+            {catLong}
           </Badge>
         )}
 
@@ -111,7 +111,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           )}
           {post.readTime && (
             <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-primary/60" />{post.readTime} min read
+              <Clock className="h-4 w-4 text-primary/60" />{post.readTime} {t.post.minRead}
             </span>
           )}
         </div>
